@@ -292,7 +292,8 @@ def get_dataloaders(
         )
 
     elif model_type.lower() in ("bpr", "pairwise"):
-        # For pairwise training use BPRDataset for train (with negatives) and rating dataset for val/test
+        # For pairwise training use BPRDataset for train (with negatives)
+        # and rating dataset for val/test
         train_ds = BPRDataset(train_df, num_items=n_items, rng=rng)
         val_ds = RatingDataset(val_df) if len(val_df) > 0 else None
         test_ds = RatingDataset(test_df) if len(test_df) > 0 else None
