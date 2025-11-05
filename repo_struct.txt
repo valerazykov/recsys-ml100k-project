@@ -1,0 +1,21 @@
+README.md
+requirements.txt
+configs/
+  train.yaml
+src/
+  __init__.py
+  cli.py           # парсер аргументов для train.py
+  train.py         # основной runner: читает конфиг и запускает pipeline
+  preprocess.py    # загрузка ML-100k, валидация, mapping id→idx, splits
+  dataset.py       # PyTorch Dataset / DataLoader (train/val/test)
+  model.py         # классы MFModel, NCFModel, + методы save_pretrained/from_pretrained
+  engine.py        # train_epoch, eval_epoch, helpers (mixed-precision)
+  metrics.py       # RMSE, Precision@K, Recall@K, NDCG
+  utils.py         # seed setting, logging setup, save/load json helpers
+  logger.py        # конфигурирование logging
+tests/
+  test_preprocess.py
+  test_dataset.py
+  test_model_save_load.py
+  test_metrics.py
+.artifacts/        # (gitignored) для сохранённых моделей/лога
