@@ -1,6 +1,7 @@
 import os
-import pandas as pd
+
 import numpy as np
+import pandas as pd
 import pytest
 
 from src import preprocess as pp
@@ -8,7 +9,9 @@ from src import preprocess as pp
 
 def test_filter_and_mappings_roundtrip(small_ratings_df):
     # filter users with at least 2 interactions, items at least 1
-    filtered = pp.filter_by_interactions(small_ratings_df, min_user_interactions=2, min_item_interactions=1)
+    filtered = pp.filter_by_interactions(
+        small_ratings_df, min_user_interactions=2, min_item_interactions=1
+    )
     # users kept: user 1 (2 interactions) and user 3 (3 interactions)
     assert set(filtered["user_id"].unique()) == {1, 3}
     # build mappings
@@ -19,7 +22,9 @@ def test_filter_and_mappings_roundtrip(small_ratings_df):
     mapped = pp.apply_mappings(filtered, user2idx, item2idx)
     assert "user_idx" in mapped.columns and "item_idx" in mapped.columns
     # indices are ints and 0-based
-    assert mapped["user_idx"].dtype == int or mapped["user_idx"].dtype == np.int64
+    assert (
+        mapped["user_idx"].dtype == int or mapped["user_idx"].dtype == np.int64
+    )
     assert mapped["user_idx"].min() == 0
 
 
@@ -32,12 +37,14 @@ def test_leave_one_out_split_various_counts():
     rows.append({"user_idx": 1, "item_idx": 1, "rating": 4.0, "timestamp": 1})
     rows.append({"user_idx": 1, "item_idx": 2, "rating": 3.0, "timestamp": 2})
     # user 2 -> 4 interactions
-    rows.extend([
-        {"user_idx": 2, "item_idx": 3, "rating": 5.0, "timestamp": 1},
-        {"user_idx": 2, "item_idx": 4, "rating": 4.0, "timestamp": 2},
-        {"user_idx": 2, "item_idx": 5, "rating": 3.0, "timestamp": 3},
-        {"user_idx": 2, "item_idx": 6, "rating": 2.0, "timestamp": 4},
-    ])
+    rows.extend(
+        [
+            {"user_idx": 2, "item_idx": 3, "rating": 5.0, "timestamp": 1},
+            {"user_idx": 2, "item_idx": 4, "rating": 4.0, "timestamp": 2},
+            {"user_idx": 2, "item_idx": 5, "rating": 3.0, "timestamp": 3},
+            {"user_idx": 2, "item_idx": 6, "rating": 2.0, "timestamp": 4},
+        ]
+    )
     df = pd.DataFrame(rows)
     train, val, test = pp.leave_one_out_split(df)
     # user 0: only train
@@ -46,10 +53,14 @@ def test_leave_one_out_split_various_counts():
     # user 1: train + test
     assert 1 in train["user_idx"].values and 1 in test["user_idx"].values
     # user 2: train includes first n-2 interactions, val second last, test last
-    assert 2 in train["user_idx"].values and 2 in val["user_idx"].values and 2 in test["user_idx"].values
+    assert (
+        2 in train["user_idx"].values
+        and 2 in val["user_idx"].values
+        and 2 in test["user_idx"].values
+    )
     # check counts
     assert len(test) == 2  # users 1 and 2 -> last interactions
-    assert len(val) == 1   # only user 2 had a val
+    assert len(val) == 1  # only user 2 had a val
 
 
 def test_load_ratings_auto_detects_sep(tmp_ratings_file):

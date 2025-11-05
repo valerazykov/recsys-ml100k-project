@@ -1,20 +1,29 @@
 import os
-import torch
-import numpy as np
-import pandas as pd
 
+import pandas as pd
+import torch
+from torch.utils.data import DataLoader
+
+from src import dataset as dataset_mod
 from src import engine as engine_mod
 from src import model as model_mod
-from src import dataset as dataset_mod
-from torch.utils.data import DataLoader
 
 
 def _make_rating_df(n_users=5, n_items=5, rating_value=3.0):
     rows = []
     ts = 0
     for u in range(n_users):
-        for i in range(min(2, n_items)):  # a couple of interactions per user (small)
-            rows.append({"user_idx": u, "item_idx": (u + i) % n_items, "rating": float(rating_value), "timestamp": ts})
+        for i in range(
+            min(2, n_items)
+        ):  # a couple of interactions per user (small)
+            rows.append(
+                {
+                    "user_idx": u,
+                    "item_idx": (u + i) % n_items,
+                    "rating": float(rating_value),
+                    "timestamp": ts,
+                }
+            )
             ts += 1
     return pd.DataFrame(rows)
 
@@ -26,7 +35,9 @@ def test_train_epoch_changes_parameters_and_returns_counts():
     loader = DataLoader(ds, batch_size=4, shuffle=False)
 
     # simple MF model on CPU
-    model = model_mod.MFModel(n_users=5, n_items=5, embedding_dim=8, use_bias=True)
+    model = model_mod.MFModel(
+        n_users=5, n_items=5, embedding_dim=8, use_bias=True
+    )
     device = torch.device("cpu")
     model.to(device)
 
@@ -57,7 +68,9 @@ def test_train_epoch_changes_parameters_and_returns_counts():
         if not torch.allclose(p.detach(), before[n], atol=1e-8):
             changed = True
             break
-    assert changed, "Expected at least one model parameter to change after train_epoch"
+    assert (
+        changed
+    ), "Expected at least one model parameter to change after train_epoch"
 
 
 def test_evaluate_rmse_perfect_prediction():
@@ -67,7 +80,9 @@ def test_evaluate_rmse_perfect_prediction():
     ds = dataset_mod.RatingDataset(df)
     loader = DataLoader(ds, batch_size=8, shuffle=False)
 
-    model = model_mod.MFModel(n_users=n_users, n_items=n_items, embedding_dim=8, use_bias=True)
+    model = model_mod.MFModel(
+        n_users=n_users, n_items=n_items, embedding_dim=8, use_bias=True
+    )
     # set embeddings to zero and item_bias to 2.5 -> predictions == 2.5 exactly
     with torch.no_grad():
         model.user_emb.weight.zero_()
@@ -94,7 +109,14 @@ def test_evaluate_full_ranking_precision_one(tmp_path):
     val_rows = []
     for u in range(n_users):
         true_item = u  # ensure true item exists and is < n_items
-        val_rows.append({"user_idx": u, "item_idx": true_item, "rating": 1.0, "timestamp": u})
+        val_rows.append(
+            {
+                "user_idx": u,
+                "item_idx": true_item,
+                "rating": 1.0,
+                "timestamp": u,
+            }
+        )
     val_df = pd.DataFrame(val_rows)
     val_ds = dataset_mod.RatingDataset(val_df)
     val_loader = DataLoader(val_ds, batch_size=1, shuffle=False)
@@ -104,6 +126,7 @@ def test_evaluate_full_ranking_precision_one(tmp_path):
     class DummyRankModel(torch.nn.Module):
         def __init__(self):
             super().__init__()
+
         def forward(self, users, items):
             # users, items are tensors on some device
             return (items == users).float() * 10.0
@@ -126,10 +149,18 @@ def test_evaluate_full_ranking_precision_one(tmp_path):
 
 
 def test_save_checkpoint_creates_files(tmp_path):
-    model = model_mod.MFModel(n_users=4, n_items=4, embedding_dim=4, use_bias=True)
+    model = model_mod.MFModel(
+        n_users=4, n_items=4, embedding_dim=4, use_bias=True
+    )
     optimizer = torch.optim.SGD(model.parameters(), lr=1e-2)
     save_dir = str(tmp_path / "chk")
-    engine_mod.save_checkpoint(model, optimizer, epoch=2, save_dir=save_dir, config={"model_init_args": {"n_users": 4, "n_items": 4}})
+    engine_mod.save_checkpoint(
+        model,
+        optimizer,
+        epoch=2,
+        save_dir=save_dir,
+        config={"model_init_args": {"n_users": 4, "n_items": 4}},
+    )
     # check files
     assert os.path.exists(os.path.join(save_dir, "checkpoint_epoch_2.pth"))
     assert os.path.exists(os.path.join(save_dir, "pytorch_model.bin"))

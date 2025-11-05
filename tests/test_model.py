@@ -1,5 +1,5 @@
-import torch
 import numpy as np
+import torch
 
 from src import model as model_mod
 
@@ -7,7 +7,12 @@ from src import model as model_mod
 def test_build_mf_model_and_forward_predict():
     cfg = {
         "type": "mf",
-        "model_init_args": {"n_users": 10, "n_items": 20, "embedding_dim": 8, "use_bias": True}
+        "model_init_args": {
+            "n_users": 10,
+            "n_items": 20,
+            "embedding_dim": 8,
+            "use_bias": True,
+        },
     }
     m = model_mod.build_model_from_cfg(cfg)
     assert isinstance(m, model_mod.MFModel)
@@ -28,7 +33,7 @@ def test_build_ncf_hidden_mapping_and_forward():
         "type": "ncf",
         "embedding_dim": 6,
         "ncf_hidden": [16, 8],
-        "model_init_args": {"n_users": 5, "n_items": 7}
+        "model_init_args": {"n_users": 5, "n_items": 7},
     }
     m = model_mod.build_model_from_cfg(cfg)
     assert isinstance(m, model_mod.NCFModel)
@@ -44,7 +49,15 @@ def test_clamp_preds_applies_clamping():
     # Build MF and force embeddings to large values so raw dot product huge -> clamp must apply
     cfg = {
         "type": "mf",
-        "model_init_args": {"n_users": 3, "n_items": 3, "embedding_dim": 4, "use_bias": True, "clamp_preds": True, "min_rating": 1.0, "max_rating": 5.0}
+        "model_init_args": {
+            "n_users": 3,
+            "n_items": 3,
+            "embedding_dim": 4,
+            "use_bias": True,
+            "clamp_preds": True,
+            "min_rating": 1.0,
+            "max_rating": 5.0,
+        },
     }
     m = model_mod.build_model_from_cfg(cfg)
     # set embeddings to large positive
@@ -66,7 +79,12 @@ def test_save_and_from_pretrained_roundtrip(tmp_path):
     # Create model, save with config, load back and compare a forward pass
     cfg = {
         "type": "mf",
-        "model_init_args": {"n_users": 8, "n_items": 9, "embedding_dim": 6, "use_bias": True}
+        "model_init_args": {
+            "n_users": 8,
+            "n_items": 9,
+            "embedding_dim": 6,
+            "use_bias": True,
+        },
     }
     m = model_mod.build_model_from_cfg(cfg)
     # small deterministic init for test
@@ -81,7 +99,9 @@ def test_save_and_from_pretrained_roundtrip(tmp_path):
     m.save_pretrained(save_dir, config=save_cfg)
 
     # load using classmethod
-    m_loaded, loaded_cfg = model_mod.MFModel.from_pretrained(save_dir, map_location="cpu")
+    m_loaded, loaded_cfg = model_mod.MFModel.from_pretrained(
+        save_dir, map_location="cpu"
+    )
     assert isinstance(m_loaded, model_mod.MFModel)
     # forward on same random inputs should be equal
     users = torch.tensor([0, 2, 3], dtype=torch.long)
@@ -97,7 +117,12 @@ def test_build_model_ignores_extra_init_args():
     # provide extra/unexpected keys in model_init_args; build should still succeed
     cfg = {
         "type": "mf",
-        "model_init_args": {"n_users": 4, "n_items": 5, "embedding_dim": 3, "some_trash_key": 12345}
+        "model_init_args": {
+            "n_users": 4,
+            "n_items": 5,
+            "embedding_dim": 3,
+            "some_trash_key": 12345,
+        },
     }
     m = model_mod.build_model_from_cfg(cfg)
     assert isinstance(m, model_mod.MFModel)

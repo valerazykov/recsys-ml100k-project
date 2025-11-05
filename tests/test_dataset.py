@@ -1,4 +1,5 @@
 import os
+
 import numpy as np
 import pandas as pd
 import torch
@@ -51,9 +52,16 @@ def test_ratingdataset_and_dataloader_shapes(tmp_path):
     # iterate one batch
     for batch in bundle.train:
         users, items, ratings = batch
-        assert isinstance(users, torch.LongTensor) or users.dtype == torch.int64
-        assert isinstance(items, torch.LongTensor) or items.dtype == torch.int64
-        assert isinstance(ratings, torch.FloatTensor) or ratings.dtype == torch.float32
+        assert (
+            isinstance(users, torch.LongTensor) or users.dtype == torch.int64
+        )
+        assert (
+            isinstance(items, torch.LongTensor) or items.dtype == torch.int64
+        )
+        assert (
+            isinstance(ratings, torch.FloatTensor)
+            or ratings.dtype == torch.float32
+        )
         assert users.ndim == 1 and items.ndim == 1 and ratings.ndim == 1
         assert users.shape[0] <= 2  # batch size
         break
@@ -63,7 +71,9 @@ def test_get_dataloaders_infers_n_users_and_items(tmp_path):
     # create df with user_idx up to 4 and item_idx values 0..4 -> expect n_users=5, n_items=5
     rows = []
     for u in range(5):
-        rows.append({"user_idx": u, "item_idx": u % 8, "rating": 4.0, "timestamp": u})
+        rows.append(
+            {"user_idx": u, "item_idx": u % 8, "rating": 4.0, "timestamp": u}
+        )
     df = pd.DataFrame(rows)
     p = tmp_path / "train.csv"
     _write_csv(df, str(p))
@@ -91,7 +101,9 @@ def test_bprdataset_negative_sampling_and_getitem(tmp_path):
     rows = []
     # user 0: interacted with items 0..4 (not 5)
     for it in range(num_items - 1):
-        rows.append({"user_idx": 0, "item_idx": it, "rating": 5.0, "timestamp": it})
+        rows.append(
+            {"user_idx": 0, "item_idx": it, "rating": 5.0, "timestamp": it}
+        )
     # user 1: small pos set {0,2}
     rows.append({"user_idx": 1, "item_idx": 0, "rating": 4.0, "timestamp": 10})
     rows.append({"user_idx": 1, "item_idx": 2, "rating": 3.0, "timestamp": 11})
@@ -122,7 +134,14 @@ def test_get_dataloaders_pairwise_batches(tmp_path):
     # users 0..3 interacting with items 0..5
     for u in range(4):
         for it in range(2):  # two interactions per user
-            rows.append({"user_idx": u, "item_idx": (u * 2 + it) % 6, "rating": 5.0, "timestamp": u * 10 + it})
+            rows.append(
+                {
+                    "user_idx": u,
+                    "item_idx": (u * 2 + it) % 6,
+                    "rating": 5.0,
+                    "timestamp": u * 10 + it,
+                }
+            )
     df = pd.DataFrame(rows)
     train_path = str(tmp_path / "train_bpr.csv")
     _write_csv(df, train_path)
@@ -159,6 +178,8 @@ def test_read_interaction_csv_raises_on_missing_columns(tmp_path):
     try:
         ds.read_interaction_csv(str(path))
         # expected to raise, if not - fail
-        assert False, "read_interaction_csv should have raised ValueError for missing required columns"
+        assert (
+            False
+        ), "read_interaction_csv should have raised ValueError for missing required columns"
     except ValueError:
         pass

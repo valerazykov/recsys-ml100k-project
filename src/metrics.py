@@ -15,12 +15,16 @@ def rmse(y_true: Sequence[float], y_pred: Sequence[float]) -> float:
     y_true_arr = np.asarray(y_true, dtype=float)
     y_pred_arr = np.asarray(y_pred, dtype=float)
     if y_true_arr.shape != y_pred_arr.shape:
-        raise ValueError(f"Shapes do not match for rmse: {y_true_arr.shape} vs {y_pred_arr.shape}")
+        raise ValueError(
+            f"Shapes do not match for rmse: {y_true_arr.shape} vs {y_pred_arr.shape}"
+        )
     mse = np.mean((y_true_arr - y_pred_arr) ** 2)
     return float(math.sqrt(mse))
 
 
-def precision_at_k_single(recommended: Sequence[int], true_set: Set[int], k: int) -> float:
+def precision_at_k_single(
+    recommended: Sequence[int], true_set: Set[int], k: int
+) -> float:
     """
     Precision@k for a single user: fraction of top-k recommended items that are relevant.
     `recommended` expected to be ordered list/array of item ids.
@@ -34,7 +38,9 @@ def precision_at_k_single(recommended: Sequence[int], true_set: Set[int], k: int
     return hits / float(len(recs))
 
 
-def recall_at_k_single(recommended: Sequence[int], true_set: Set[int], k: int) -> float:
+def recall_at_k_single(
+    recommended: Sequence[int], true_set: Set[int], k: int
+) -> float:
     """
     Recall@k for a single user: fraction of relevant items that are present in top-k recommendations.
     If true_set is empty, returns 0.0.
@@ -46,7 +52,9 @@ def recall_at_k_single(recommended: Sequence[int], true_set: Set[int], k: int) -
     return hits / float(len(true_set))
 
 
-def ndcg_at_k_single(recommended: Sequence[int], true_set: Set[int], k: int) -> float:
+def ndcg_at_k_single(
+    recommended: Sequence[int], true_set: Set[int], k: int
+) -> float:
     """
     NDCG@k for a single user.
     DCG = sum_{i=1..k} rel_i / log2(i+1) where rel_i is 1 if recommended[i-1] in true_set else 0
@@ -150,10 +158,16 @@ def evaluate_ranking_full(
             for start in range(0, n_items, batch_size):
                 end = min(n_items, start + batch_size)
                 items_chunk = all_items[start:end]
-                users_chunk = np.full(shape=(len(items_chunk),), fill_value=int(u), dtype=np.int64)
+                users_chunk = np.full(
+                    shape=(len(items_chunk),),
+                    fill_value=int(u),
+                    dtype=np.int64,
+                )
                 users_t = torch.from_numpy(users_chunk).long().to(model_device)
                 items_t = torch.from_numpy(items_chunk).long().to(model_device)
-                chunk_scores = model(users_t, items_t)  # expects (batch,) tensor
+                chunk_scores = model(
+                    users_t, items_t
+                )  # expects (batch,) tensor
                 scores_chunks.append(chunk_scores.cpu().numpy())
             scores = np.concatenate(scores_chunks, axis=0)  # shape (n_items,)
             # get top-k item indices
@@ -169,5 +183,11 @@ def evaluate_ranking_full(
 
     recommended_arr = np.stack(recommended_list, axis=0)  # (U, k)
     users_for_eval = users_arr
-    metrics = precision_recall_ndcg_for_aligned(users_for_eval, recommended_arr, ground_truth_sets, k)
-    return {"precision@k": metrics["precision"], "recall@k": metrics["recall"], "ndcg@k": metrics["ndcg"]}
+    metrics = precision_recall_ndcg_for_aligned(
+        users_for_eval, recommended_arr, ground_truth_sets, k
+    )
+    return {
+        "precision@k": metrics["precision"],
+        "recall@k": metrics["recall"],
+        "ndcg@k": metrics["ndcg"],
+    }

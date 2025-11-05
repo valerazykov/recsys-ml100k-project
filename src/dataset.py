@@ -26,7 +26,9 @@ def read_interaction_csv(path: str) -> pd.DataFrame:
     df = pd.read_csv(path)
     required = {"user_idx", "item_idx"}
     if not required.issubset(set(df.columns)):
-        raise ValueError(f"Interaction CSV {path} must contain columns {required}. Found: {df.columns.tolist()}")
+        raise ValueError(
+            f"Interaction CSV {path} must contain columns {required}. Found: {df.columns.tolist()}"
+        )
     return df
 
 
@@ -44,7 +46,9 @@ class RatingDataset(Dataset):
             interactions = read_interaction_csv(interactions)
         self.df = interactions.reset_index(drop=True)
         if "rating" not in self.df.columns:
-            raise ValueError("RatingDataset expects 'rating' column in interactions")
+            raise ValueError(
+                "RatingDataset expects 'rating' column in interactions"
+            )
         # ensure integer indices
         self.users = self.df["user_idx"].astype(int).to_numpy()
         self.items = self.df["item_idx"].astype(int).to_numpy()
@@ -53,11 +57,17 @@ class RatingDataset(Dataset):
     def __len__(self) -> int:
         return len(self.df)
 
-    def __getitem__(self, idx: int) -> Tuple[torch.LongTensor, torch.LongTensor, torch.FloatTensor]:
+    def __getitem__(
+        self, idx: int
+    ) -> Tuple[torch.LongTensor, torch.LongTensor, torch.FloatTensor]:
         u = int(self.users[idx])
         i = int(self.items[idx])
         r = float(self.ratings[idx])
-        return torch.tensor(u, dtype=torch.long), torch.tensor(i, dtype=torch.long), torch.tensor(r, dtype=torch.float32)
+        return (
+            torch.tensor(u, dtype=torch.long),
+            torch.tensor(i, dtype=torch.long),
+            torch.tensor(r, dtype=torch.float32),
+        )
 
 
 class BPRDataset(Dataset):
@@ -94,7 +104,10 @@ class BPRDataset(Dataset):
         self.user_pos = build_user_pos_dict(self.df)
         self.user_list = sorted(self.user_pos.keys())
         # precompute list of users repeated by number of interactions for sampling if needed
-        self.user_interactions = [(u, np.array(sorted(list(self.user_pos[u])), dtype=np.int64)) for u in self.user_list]
+        self.user_interactions = [
+            (u, np.array(sorted(list(self.user_pos[u])), dtype=np.int64))
+            for u in self.user_list
+        ]
 
         # for __len__ we return number of positive interactions (len of df)
         self.length = len(self.df)
@@ -122,14 +135,20 @@ class BPRDataset(Dataset):
             return int(self.rng.randint(0, self.num_items))
         return int(self.rng.choice(candidates))
 
-    def __getitem__(self, idx: int) -> Tuple[torch.LongTensor, torch.LongTensor, torch.LongTensor]:
+    def __getitem__(
+        self, idx: int
+    ) -> Tuple[torch.LongTensor, torch.LongTensor, torch.LongTensor]:
         """
         idx indexes into the original interactions dataframe; returns (user, pos_item, neg_item)
         """
         u = int(self.users[idx])
         pos = int(self.pos_items[idx])
         neg = int(self.sample_negative(u))
-        return torch.tensor(u, dtype=torch.long), torch.tensor(pos, dtype=torch.long), torch.tensor(neg, dtype=torch.long)
+        return (
+            torch.tensor(u, dtype=torch.long),
+            torch.tensor(pos, dtype=torch.long),
+            torch.tensor(neg, dtype=torch.long),
+        )
 
 
 def build_user_pos_dict(df: pd.DataFrame) -> Dict[int, set]:
@@ -144,14 +163,18 @@ def build_user_pos_dict(df: pd.DataFrame) -> Dict[int, set]:
     return user_pos
 
 
-def _collate_rating_batch(batch: List[Tuple[torch.LongTensor, torch.LongTensor, torch.FloatTensor]]):
+def _collate_rating_batch(
+    batch: List[Tuple[torch.LongTensor, torch.LongTensor, torch.FloatTensor]]
+):
     users = torch.stack([b[0] for b in batch])
     items = torch.stack([b[1] for b in batch])
     ratings = torch.stack([b[2] for b in batch])
     return users, items, ratings
 
 
-def _collate_bpr_batch(batch: List[Tuple[torch.LongTensor, torch.LongTensor, torch.LongTensor]]):
+def _collate_bpr_batch(
+    batch: List[Tuple[torch.LongTensor, torch.LongTensor, torch.LongTensor]]
+):
     users = torch.stack([b[0] for b in batch])
     pos = torch.stack([b[1] for b in batch])
     neg = torch.stack([b[2] for b in batch])
@@ -194,21 +217,43 @@ def get_dataloaders(
     rng = np.random.RandomState(seed)
     # load files into dfs (even if empty)
     train_df = read_interaction_csv(train_path)
-    val_df = read_interaction_csv(val_path) if (val_path and os.path.exists(val_path)) else pd.DataFrame(columns=train_df.columns)
-    test_df = read_interaction_csv(test_path) if (test_path and os.path.exists(test_path)) else pd.DataFrame(columns=train_df.columns)
+    val_df = (
+        read_interaction_csv(val_path)
+        if (val_path and os.path.exists(val_path))
+        else pd.DataFrame(columns=train_df.columns)
+    )
+    test_df = (
+        read_interaction_csv(test_path)
+        if (test_path and os.path.exists(test_path))
+        else pd.DataFrame(columns=train_df.columns)
+    )
 
     # basic checks
-    logger.info(f"Loaded interactions: train={len(train_df)} val={len(val_df)} test={len(test_df)}")
+    logger.info(
+        f"Loaded interactions: train={len(train_df)} val={len(val_df)} test={len(test_df)}"
+    )
     # determine n_users/n_items if not provided? function arguments require them; but allow fallback
     if n_users is None or n_items is None:
         # attempt to infer
-        n_users_in_data = int(max(train_df["user_idx"].max() if len(train_df) > 0 else -1,
-                                  val_df["user_idx"].max() if len(val_df) > 0 else -1,
-                                  test_df["user_idx"].max() if len(test_df) > 0 else -1) + 1)
-        n_items_in_data = int(max(train_df["item_idx"].max() if len(train_df) > 0 else -1,
-                                  val_df["item_idx"].max() if len(val_df) > 0 else -1,
-                                  test_df["item_idx"].max() if len(test_df) > 0 else -1) + 1)
-        logger.warning(f"n_users/n_items not provided. Inferred n_users={n_users_in_data}, n_items={n_items_in_data}")
+        n_users_in_data = int(
+            max(
+                train_df["user_idx"].max() if len(train_df) > 0 else -1,
+                val_df["user_idx"].max() if len(val_df) > 0 else -1,
+                test_df["user_idx"].max() if len(test_df) > 0 else -1,
+            )
+            + 1
+        )
+        n_items_in_data = int(
+            max(
+                train_df["item_idx"].max() if len(train_df) > 0 else -1,
+                val_df["item_idx"].max() if len(val_df) > 0 else -1,
+                test_df["item_idx"].max() if len(test_df) > 0 else -1,
+            )
+            + 1
+        )
+        logger.warning(
+            f"n_users/n_items not provided. Inferred n_users={n_users_in_data}, n_items={n_items_in_data}"
+        )
         n_users = n_users_in_data
         n_items = n_items_in_data
 
@@ -225,8 +270,28 @@ def get_dataloaders(
             collate_fn=_collate_rating_batch,
             pin_memory=True,
         )
-        val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False, num_workers=num_workers, collate_fn=_collate_rating_batch) if val_ds is not None else None
-        test_loader = DataLoader(test_ds, batch_size=batch_size, shuffle=False, num_workers=num_workers, collate_fn=_collate_rating_batch) if test_ds is not None else None
+        val_loader = (
+            DataLoader(
+                val_ds,
+                batch_size=batch_size,
+                shuffle=False,
+                num_workers=num_workers,
+                collate_fn=_collate_rating_batch,
+            )
+            if val_ds is not None
+            else None
+        )
+        test_loader = (
+            DataLoader(
+                test_ds,
+                batch_size=batch_size,
+                shuffle=False,
+                num_workers=num_workers,
+                collate_fn=_collate_rating_batch,
+            )
+            if test_ds is not None
+            else None
+        )
 
     elif model_type.lower() in ("bpr", "pairwise"):
         # For pairwise training use BPRDataset for train (with negatives) and rating dataset for val/test
@@ -242,10 +307,32 @@ def get_dataloaders(
             collate_fn=_collate_bpr_batch,
             pin_memory=True,
         )
-        val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False, num_workers=num_workers, collate_fn=_collate_rating_batch) if val_ds is not None else None
-        test_loader = DataLoader(test_ds, batch_size=batch_size, shuffle=False, num_workers=num_workers, collate_fn=_collate_rating_batch) if test_ds is not None else None
+        val_loader = (
+            DataLoader(
+                val_ds,
+                batch_size=batch_size,
+                shuffle=False,
+                num_workers=num_workers,
+                collate_fn=_collate_rating_batch,
+            )
+            if val_ds is not None
+            else None
+        )
+        test_loader = (
+            DataLoader(
+                test_ds,
+                batch_size=batch_size,
+                shuffle=False,
+                num_workers=num_workers,
+                collate_fn=_collate_rating_batch,
+            )
+            if test_ds is not None
+            else None
+        )
     else:
-        raise ValueError(f"Unknown model_type {model_type}. Choose from 'mf', 'ncf', 'bpr'.")
+        raise ValueError(
+            f"Unknown model_type {model_type}. Choose from 'mf', 'ncf', 'bpr'."
+        )
 
     bundle = DataloaderBundle(
         train=train_loader,
@@ -265,15 +352,23 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--train", type=str, default="data/ml-100k/processed/train.csv")
-    parser.add_argument("--val", type=str, default="data/ml-100k/processed/val.csv")
-    parser.add_argument("--test", type=str, default="data/ml-100k/processed/test.csv")
+    parser.add_argument(
+        "--train", type=str, default="data/ml-100k/processed/train.csv"
+    )
+    parser.add_argument(
+        "--val", type=str, default="data/ml-100k/processed/val.csv"
+    )
+    parser.add_argument(
+        "--test", type=str, default="data/ml-100k/processed/test.csv"
+    )
     parser.add_argument("--model-type", type=str, default="mf")
     parser.add_argument("--batch-size", type=int, default=512)
     parser.add_argument("--num-workers", type=int, default=0)
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
+    logging.basicConfig(
+        level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s"
+    )
     bundle = get_dataloaders(
         train_path=args.train,
         val_path=args.val,
@@ -285,13 +380,19 @@ if __name__ == "__main__":
         num_workers=args.num_workers,
         seed=args.seed,
     )
-    logger.info(f"Train batches: approx {len(bundle.train)} (len train_df={bundle.train_len})")
+    logger.info(
+        f"Train batches: approx {len(bundle.train)} (len train_df={bundle.train_len})"
+    )
     # iterate a single batch to check shapes
     for batch in bundle.train:
         if args.model_type.lower() in ("mf", "ncf"):
             users, items, ratings = batch
-            logger.info(f"Sample batch shapes: users={users.shape}, items={items.shape}, ratings={ratings.shape}")
+            logger.info(
+                f"Sample batch shapes: users={users.shape}, items={items.shape}, ratings={ratings.shape}"
+            )
         else:
             users, pos, neg = batch
-            logger.info(f"Sample batch shapes: users={users.shape}, pos={pos.shape}, neg={neg.shape}")
+            logger.info(
+                f"Sample batch shapes: users={users.shape}, pos={pos.shape}, neg={neg.shape}"
+            )
         break

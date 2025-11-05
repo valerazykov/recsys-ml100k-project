@@ -15,7 +15,13 @@ from src import metrics as metrics_mod
 logger = logging.getLogger(__name__)
 
 
-def save_checkpoint(model: nn.Module, optimizer: Optional[torch.optim.Optimizer], epoch: int, save_dir: str, config: Optional[dict] = None) -> None:
+def save_checkpoint(
+    model: nn.Module,
+    optimizer: Optional[torch.optim.Optimizer],
+    epoch: int,
+    save_dir: str,
+    config: Optional[dict] = None,
+) -> None:
     """
     Save optimizer state and epoch, plus model weights via model.save_pretrained if available.
     """
@@ -34,13 +40,17 @@ def save_checkpoint(model: nn.Module, optimizer: Optional[torch.optim.Optimizer]
     try:
         if hasattr(model, "save_pretrained"):
             model.save_pretrained(save_dir, config=config)
-            logger.info(f"Saved model weights/config via save_pretrained to {save_dir}")
+            logger.info(
+                f"Saved model weights/config via save_pretrained to {save_dir}"
+            )
         else:
             model_path = os.path.join(save_dir, "pytorch_model.bin")
             torch.save(model.state_dict(), model_path)
             logger.info(f"Saved model.state_dict() to {model_path}")
     except Exception:
-        logger.exception("Failed to save model weights via save_pretrained; attempted state_dict fallback.")
+        logger.exception(
+            "Failed to save model weights via save_pretrained; attempted state_dict fallback."
+        )
 
 
 def train_epoch(
@@ -86,7 +96,9 @@ def train_epoch(
             scaler.scale(loss).backward()
             if max_grad_norm is not None:
                 scaler.unscale_(optimizer)
-                torch.nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm)
+                torch.nn.utils.clip_grad_norm_(
+                    model.parameters(), max_grad_norm
+                )
             scaler.step(optimizer)
             scaler.update()
             batch_loss = float(loss.item())
@@ -108,7 +120,9 @@ def train_epoch(
             scaler.scale(loss).backward()
             if max_grad_norm is not None:
                 scaler.unscale_(optimizer)
-                torch.nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm)
+                torch.nn.utils.clip_grad_norm_(
+                    model.parameters(), max_grad_norm
+                )
             scaler.step(optimizer)
             scaler.update()
             batch_loss = float(loss.item())
@@ -164,7 +178,9 @@ def evaluate(
                 i = int(getattr(row, "item_idx"))
                 ground_truth.setdefault(u, set()).add(i)
     except Exception:
-        logger.debug("Could not extract ground truth from dataloader.dataset.df; full ranking may be unavailable.")
+        logger.debug(
+            "Could not extract ground truth from dataloader.dataset.df; full ranking may be unavailable."
+        )
 
     # First pass: compute pointwise loss / rmse if possible
     with torch.no_grad():
@@ -181,7 +197,9 @@ def evaluate(
                 n_examples += users.shape[0]
                 y_trues.append(ratings.cpu().numpy())
                 y_preds.append(preds.cpu().numpy())
-                pbar.set_postfix_str(f"batch_rmse={float(math.sqrt(float(loss.item()))):.4f}")
+                pbar.set_postfix_str(
+                    f"batch_rmse={float(math.sqrt(float(loss.item()))):.4f}"
+                )
             else:
                 users, pos, neg = batch
                 users = users.to(device)
@@ -207,9 +225,13 @@ def evaluate(
     # Full-ranking evaluation using src.metrics.evaluate_ranking_full
     if compute_full_ranking:
         if n_items is None:
-            raise ValueError("n_items must be provided for full ranking evaluation.")
+            raise ValueError(
+                "n_items must be provided for full ranking evaluation."
+            )
         if len(ground_truth) == 0:
-            raise ValueError("Could not extract ground truth for ranking evaluation from dataloader.dataset.df")
+            raise ValueError(
+                "Could not extract ground truth for ranking evaluation from dataloader.dataset.df"
+            )
 
         users_for_eval = sorted(list(ground_truth.keys()))
         # call evaluate_ranking_full from metrics module
@@ -223,8 +245,14 @@ def evaluate(
             device=device,
         )
         # rename keys to match previous naming
-        metrics["precision@k"] = ranking_res.get("precision@k", ranking_res.get("precision", 0.0))
-        metrics["recall@k"] = ranking_res.get("recall@k", ranking_res.get("recall", 0.0))
-        metrics["ndcg@k"] = ranking_res.get("ndcg@k", ranking_res.get("ndcg", 0.0))
+        metrics["precision@k"] = ranking_res.get(
+            "precision@k", ranking_res.get("precision", 0.0)
+        )
+        metrics["recall@k"] = ranking_res.get(
+            "recall@k", ranking_res.get("recall", 0.0)
+        )
+        metrics["ndcg@k"] = ranking_res.get(
+            "ndcg@k", ranking_res.get("ndcg", 0.0)
+        )
 
     return metrics

@@ -9,7 +9,6 @@ from typing import Any, Dict, Optional
 import numpy as np
 import yaml
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -37,7 +36,9 @@ def set_seed(seed: int) -> None:
         try:
             torch.backends.cudnn.deterministic = True
             torch.backends.cudnn.benchmark = False
-            logger.info("Configured torch.backends.cudnn for deterministic behavior (may be slower).")
+            logger.info(
+                "Configured torch.backends.cudnn for deterministic behavior (may be slower)."
+            )
         except Exception:
             logger.warning("Could not set cudnn deterministic flags.")
 
@@ -49,7 +50,9 @@ def ensure_dir(path: str) -> None:
     os.makedirs(path, exist_ok=True)
 
 
-def save_json(obj: Any, path: str, indent: int = 2, ensure_ascii: bool = False) -> None:
+def save_json(
+    obj: Any, path: str, indent: int = 2, ensure_ascii: bool = False
+) -> None:
     """Save Python object as JSON to disk (creates parent dir if needed)."""
     ensure_dir(os.path.dirname(path) or ".")
     with open(path, "w", encoding="utf-8") as f:
@@ -85,7 +88,9 @@ def load_yaml(path: str) -> Any:
     return data
 
 
-def setup_basic_logger(level: str = "INFO", log_file: Optional[str] = None) -> None:
+def setup_basic_logger(
+    level: str = "INFO", log_file: Optional[str] = None
+) -> None:
     """
     Setup root logger: StreamHandler (console) + optional FileHandler.
     Level is a string like "INFO" or "DEBUG".
@@ -111,7 +116,12 @@ def setup_basic_logger(level: str = "INFO", log_file: Optional[str] = None) -> N
         root.setLevel(level_value)
         if log_file:
             # add file handler if not present
-            if not any(isinstance(h, logging.FileHandler) and getattr(h, "baseFilename", None) == os.path.abspath(log_file) for h in root.handlers):
+            if not any(
+                isinstance(h, logging.FileHandler)
+                and getattr(h, "baseFilename", None)
+                == os.path.abspath(log_file)
+                for h in root.handlers
+            ):
                 ensure_dir(os.path.dirname(log_file) or ".")
                 fh = logging.FileHandler(log_file)
                 fh.setLevel(level_value)
@@ -120,7 +130,9 @@ def setup_basic_logger(level: str = "INFO", log_file: Optional[str] = None) -> N
     logger.debug(f"Logger configured. level={level}, log_file={log_file}")
 
 
-def dict_deep_update(base: Dict[str, Any], updates: Dict[str, Any]) -> Dict[str, Any]:
+def dict_deep_update(
+    base: Dict[str, Any], updates: Dict[str, Any]
+) -> Dict[str, Any]:
     """
     Recursively update dictionary 'base' with 'updates' and return updated dict.
     Similar to dict.update but handles nested dicts.

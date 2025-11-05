@@ -1,10 +1,12 @@
 from src import utils
 
+
 def test_dict_deep_update_simple():
     base = {"a": {"b": 1}, "x": 5}
     upd = {"a": {"c": 2}, "x": 6}
     res = utils.dict_deep_update(base, upd)
     assert res["a"]["b"] == 1 and res["a"]["c"] == 2 and res["x"] == 6
+
 
 def test_safe_cast_and_yaml_json(tmp_path):
     assert utils.safe_cast("10", int) == 10

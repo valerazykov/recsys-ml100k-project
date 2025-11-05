@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 import json
 import logging
 import os
@@ -7,8 +8,6 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import torch
 import torch.nn as nn
-import inspect
-
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +23,9 @@ class BaseRecModel(nn.Module):
     and/or provide their own save/load logic but can use these helpers.
     """
 
-    def save_pretrained(self, save_dir: str, config: Optional[Dict[str, Any]] = None) -> None:
+    def save_pretrained(
+        self, save_dir: str, config: Optional[Dict[str, Any]] = None
+    ) -> None:
         """
         Save model state_dict and optional config dict to disk.
 
@@ -48,7 +49,9 @@ class BaseRecModel(nn.Module):
         logger.info(f"Saved config to {config_path}")
 
     @classmethod
-    def from_pretrained(cls, load_dir: str, map_location: Optional[str] = None) -> Tuple["BaseRecModel", Dict[str, Any]]:
+    def from_pretrained(
+        cls, load_dir: str, map_location: Optional[str] = None
+    ) -> Tuple["BaseRecModel", Dict[str, Any]]:
         """
         Load model and config from disk. Returns (model, config_dict).
         Expects config.json to contain 'model_init_args' that are passed to the constructor.
@@ -57,19 +60,25 @@ class BaseRecModel(nn.Module):
         model_path = os.path.join(load_dir, "pytorch_model.bin")
 
         if not os.path.exists(config_path):
-            raise FileNotFoundError(f"Config file not found in {load_dir} (expected config.json)")
+            raise FileNotFoundError(
+                f"Config file not found in {load_dir} (expected config.json)"
+            )
 
         with open(config_path, "r", encoding="utf-8") as f:
             config = json.load(f)
 
         model_init_args = config.get("model_init_args", {})
-        logger.info(f"Loading model of type {cls.__name__} with init args: {model_init_args}")
+        logger.info(
+            f"Loading model of type {cls.__name__} with init args: {model_init_args}"
+        )
 
         # instantiate model - subclasses must accept **model_init_args
         model = cls(**model_init_args)  # type: ignore[arg-type]
 
         if not os.path.exists(model_path):
-            raise FileNotFoundError(f"Model weights not found in {load_dir} (expected pytorch_model.bin)")
+            raise FileNotFoundError(
+                f"Model weights not found in {load_dir} (expected pytorch_model.bin)"
+            )
 
         map_loc = map_location if map_location is not None else None
         state = torch.load(model_path, map_location=map_loc)
@@ -132,7 +141,9 @@ class MFModel(BaseRecModel):
             nn.init.constant_(self.user_bias.weight, 0.0)
             nn.init.constant_(self.item_bias.weight, 0.0)
 
-    def forward(self, user_idx: torch.LongTensor, item_idx: torch.LongTensor) -> torch.FloatTensor:
+    def forward(
+        self, user_idx: torch.LongTensor, item_idx: torch.LongTensor
+    ) -> torch.FloatTensor:
         """
         user_idx, item_idx: LongTensor of shape (batch,)
         returns: FloatTensor shape (batch,) containing predicted scores
@@ -151,11 +162,18 @@ class MFModel(BaseRecModel):
 
         if self.clamp_preds:
             if (self.min_rating is None) or (self.max_rating is None):
-                raise ValueError("clamp_preds=True but min_rating/max_rating not set")
+                raise ValueError(
+                    "clamp_preds=True but min_rating/max_rating not set"
+                )
             out = torch.clamp(out, min=self.min_rating, max=self.max_rating)
         return out
 
-    def predict(self, users: Sequence[int], items: Sequence[int], device: Optional[torch.device] = None) -> torch.Tensor:
+    def predict(
+        self,
+        users: Sequence[int],
+        items: Sequence[int],
+        device: Optional[torch.device] = None,
+    ) -> torch.Tensor:
         """
         Convenience wrapper to predict on lists/arrays of user/item indices.
         Returns a torch.FloatTensor on CPU by default (unless device provided).
@@ -199,7 +217,9 @@ class NCFModel(BaseRecModel):
         self.n_users = int(n_users)
         self.n_items = int(n_items)
         self.embedding_dim = int(embedding_dim)
-        self.hidden_dims = list(hidden_dims) if hidden_dims is not None else [128, 64]
+        self.hidden_dims = (
+            list(hidden_dims) if hidden_dims is not None else [128, 64]
+        )
         self.dropout = float(dropout)
         self.clamp_preds = bool(clamp_preds)
         self.min_rating = min_rating
@@ -233,18 +253,27 @@ class NCFModel(BaseRecModel):
                 if m.bias is not None:
                     nn.init.constant_(m.bias, 0.0)
 
-    def forward(self, user_idx: torch.LongTensor, item_idx: torch.LongTensor) -> torch.FloatTensor:
+    def forward(
+        self, user_idx: torch.LongTensor, item_idx: torch.LongTensor
+    ) -> torch.FloatTensor:
         u = self.user_emb(user_idx)
         v = self.item_emb(item_idx)
         x = torch.cat([u, v], dim=-1)  # (batch, 2*emb)
         out = self.mlp(x).squeeze(-1)  # (batch,)
         if self.clamp_preds:
             if (self.min_rating is None) or (self.max_rating is None):
-                raise ValueError("clamp_preds=True but min_rating/max_rating not set")
+                raise ValueError(
+                    "clamp_preds=True but min_rating/max_rating not set"
+                )
             out = torch.clamp(out, min=self.min_rating, max=self.max_rating)
         return out
 
-    def predict(self, users: Sequence[int], items: Sequence[int], device: Optional[torch.device] = None) -> torch.Tensor:
+    def predict(
+        self,
+        users: Sequence[int],
+        items: Sequence[int],
+        device: Optional[torch.device] = None,
+    ) -> torch.Tensor:
         if device is None:
             device = next(self.parameters()).device
         u = torch.tensor(users, dtype=torch.long, device=device)
@@ -255,12 +284,19 @@ class NCFModel(BaseRecModel):
         return out.cpu()
 
 
-def _filter_init_args_for_class(init_args: Dict[str, Any], cls) -> Dict[str, Any]:
+def _filter_init_args_for_class(
+    init_args: Dict[str, Any], cls
+) -> Dict[str, Any]:
     """
     Keep only keys that are accepted by cls.__init__ (excluding 'self').
     """
     sig = inspect.signature(cls.__init__)
-    valid_params = [p.name for p in sig.parameters.values() if p.name != "self" and p.kind in (p.POSITIONAL_OR_KEYWORD, p.KEYWORD_ONLY)]
+    valid_params = [
+        p.name
+        for p in sig.parameters.values()
+        if p.name != "self"
+        and p.kind in (p.POSITIONAL_OR_KEYWORD, p.KEYWORD_ONLY)
+    ]
     filtered = {}
     for k, v in init_args.items():
         if k in valid_params:
@@ -309,7 +345,9 @@ def build_model_from_cfg(model_cfg: Dict[str, Any]) -> BaseRecModel:
         filtered_args = _filter_init_args_for_class(init_args, NCFModel)
         return NCFModel(**filtered_args)
     else:
-        raise ValueError(f"Unknown model type: {mtype}. Supported: 'mf', 'ncf'.")
+        raise ValueError(
+            f"Unknown model type: {mtype}. Supported: 'mf', 'ncf'."
+        )
 
 
 # Example quick smoke test when run as script
@@ -317,12 +355,27 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     # tiny smoke
     n_users, n_items = 100, 500
-    m = MFModel(n_users=n_users, n_items=n_items, embedding_dim=16, clamp_preds=True, min_rating=1.0, max_rating=5.0)
+    m = MFModel(
+        n_users=n_users,
+        n_items=n_items,
+        embedding_dim=16,
+        clamp_preds=True,
+        min_rating=1.0,
+        max_rating=5.0,
+    )
     users = torch.randint(0, n_users, (8,), dtype=torch.long)
     items = torch.randint(0, n_items, (8,), dtype=torch.long)
     preds = m(users, items)
-    logger.info(f"MF preds shape: {preds.shape}, min={preds.min().item():.4f}, max={preds.max().item():.4f}")
+    logger.info(
+        f"MF preds shape: {preds.shape}, min={preds.min().item():.4f}, max={preds.max().item():.4f}"
+    )
 
-    m2 = NCFModel(n_users=n_users, n_items=n_items, embedding_dim=8, hidden_dims=[32, 16], dropout=0.1)
+    m2 = NCFModel(
+        n_users=n_users,
+        n_items=n_items,
+        embedding_dim=8,
+        hidden_dims=[32, 16],
+        dropout=0.1,
+    )
     preds2 = m2(users, items)
     logger.info(f"NCF preds shape: {preds2.shape}")
