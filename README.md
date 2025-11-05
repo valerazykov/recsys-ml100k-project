@@ -1,19 +1,19 @@
 # RecSys — MovieLens 100k (MLOps проект)
 
-**Краткое описание:** прототип рекомендательной системы на базе MovieLens-100k с полностью воспроизводимым пайплайном: загрузка/предобработка данных, обучение модели (MF / NCF), сохранение модели в формате, совместимом с `save_pretrained()`-подходом, тесты и CI.
+**Краткое описание:** прототип рекомендательной системы на базе MovieLens-100k с полностью воспроизводимым пайплайном: загрузка/предобработка данных, обучение модели (MF / NCF), сохранение модели в формате, совместимом с `save_pretrained()`, тесты, линтинг кода и CI/CD.
 
 ---
 
 ## 1. Цель проекта / бизнес-задача
 
-Повысить релевантность персональных рекомендаций фильмов, что приведёт к росту CTR рекомендованных карточек и удержанию пользователей. На уровне прототипа — показать воспроизводимый MLOps-поток от данных до deploy-готовой модели.
+Повысить релевантность персональных рекомендаций фильмов, что приведёт к росту CTR рекомендованных карточек и удержанию пользователей. На уровне прототипа — показать полностью воспроизводимый MLOps-поток от данных до deploy-готовой модели.
 
 ---
 
 ## 2. Датасет
 
-**MovieLens 100k** (ml-100k).
-Формат: `user_id`, `item_id`, `rating`, `timestamp` (+ metadata: фильмы, жанры, информация о пользователях). Небольшой и удобный для быстрого прототипирования.
+**MovieLens 100k** (ml-100k).  
+Формат: `user_id`, `item_id`, `rating`, `timestamp` (+ metadata: фильмы, жанры, информация о пользователях).
 
 Скачать:
 
@@ -24,11 +24,25 @@ unzip ml-100k.zip
 cd ..
 ```
 
-Можно также просто скачать архив по [ссылке](https://files.grouplens.org/datasets/movielens/ml-100k.zip) и распаковать в папку `./data`.
+Или скачать архив по [ссылке](https://files.grouplens.org/datasets/movielens/ml-100k.zip) и распаковать в `./data`.
 
 ---
 
-## 3. Целевые метрики
+## 3. Что реализовано
+
+* **Препроцессинг данных**: проверка структуры, типов, наличия необходимых признаков, разбиение на train/val/test.
+* **Dataset / DataLoader**: `RatingDataset`, корректное формирование батчей, поддержка n_users / n_items.
+* **Модели**: MF и NCF с методами `save_pretrained()` и `from_pretrained()`.
+* **Обучение**: CLI runner `train.py`, чтение конфигурации, логирование через `logging`.
+* **Инференс / top-N**: корректная обработка выходов модели → top-K рекомендации.
+* **Тесты**: покрытие всех логических блоков пайплайна (`dataset.py`, `model.py`, `engine.py`, `train.py`, `utils.py`).
+* **CI/CD**: GitHub Actions запускает тесты и линтер на каждый push.
+* **Linting**: flake8 + форматирование кода.
+* **Воспроизводимость**: фиксированный `random_seed`, зафиксированные версии пакетов в `requirements.txt`.
+
+---
+
+## 4. Целевые метрики
 
 **Бизнес:**
 
@@ -36,29 +50,29 @@ cd ..
 
 **ML / качество (оценка на валидации и тесте):**
 
-* RMSE (rating prediction) — целевое значение: **≤ 0.95** (ориентировочно для прототипа).
+* RMSE (rating prediction) — целевое значение: **≤ 0.95**.
 * Precision@10 ≥ 0.25, Recall@10 ≥ 0.15.
 
 **Технические SLA (прототип):**
 
 * p95 latency (inference, single request / top-N) ≤ **200 ms**.
 * Error rate ≤ **1%**.
-* Memory (при инференсе) ≤ **512 MB**; CPU ≤ **1 vCPU** (ориентировочно).
+* Memory (при инференсе) ≤ **512 MB**; CPU ≤ **1 vCPU**.
 
 ---
 
-## 4. План экспериментов (high-level)
+## 5. План экспериментов (high-level)
 
-1. **Baseline** — popularity (most popular items), оценить Precision@K / Recall@K.
+1. **Baseline** — popularity (most popular items), оценка Precision@K / Recall@K.
 2. **Collaborative Filtering** — Matrix Factorization (SVD / PyTorch MF).
 3. **Neural baseline** — Neural Collaborative Filtering (NCF) — эмбеддинги пользователей/фильмов + MLP.
-4. **Evaluation** — RMSE (если предсказываем рейтинг) + top-N метрики: Precision@K, Recall@K, NDCG.
-5. **Deployment prep** — обёртка модели с `save_pretrained()` / `from_pretrained()` (сохранение state_dict + config).
-6. **MLOps** — pytest тесты для предобработки/датасета/инференса + GitHub Actions для автоматического запуска тестов на push.
+4. **Evaluation** — RMSE, top-N метрики: Precision@K, Recall@K, NDCG.
+5. **Deployment prep** — обёртка модели с `save_pretrained()` / `from_pretrained()`.
+6. **MLOps** — pytest тесты для всех блоков + линтинг кода + GitHub Actions для автоматического запуска.
 
 ---
 
-## 5. Структура репозитория
+## 6. Структура репозитория
 
 ```
 README.md
@@ -68,23 +82,27 @@ configs/
 src/
   preprocess.py      # загрузка, валидация данных, split
   dataset.py         # Dataset / DataLoader
-  model.py           # MF / NCF с методами save_pretrained/from_pretrained
-  train.py           # CLI runner — читает config, логирует, запускает обучение
-  predict.py         # wrapper для inference (top-N)
-  logger.py
+  model.py           # MF / NCF с save_pretrained/from_pretrained
+  train.py           # CLI runner — читает config, логирует запускает обучение
+  engine.py          # функции обучения и оценки модели
+  utils.py
+  metrics.py
 tests/
   test_preprocess.py
   test_dataset.py
-  test_inference.py
+  test_model.py
+  test_engine.py
+  test_metrics.py
+  test_train_helpers.py
 .github/
-  workflows/ci.yml    # workflow для запуска тестов на push
+  workflows/ci.yml    # GitHub Actions workflow
 artifacts/
   model/               # сюда сохраняется модель после обучения
 ```
 
 ---
 
-## 6. Пример `configs/train.yaml`
+## 7. Пример `configs/train.yaml`
 
 ```yaml
 data:
@@ -106,6 +124,7 @@ model:
 
 save:
   dir: "artifacts/model"
+
 metrics:
   topk: 10
 
@@ -117,7 +136,7 @@ slo:
 
 ---
 
-## 7. Как запустить (локально)
+## 8. Как запустить проект локально
 
 1. Создать виртуальное окружение и установить зависимости:
 
@@ -130,42 +149,64 @@ pip install -r requirements.txt
 
 2. Скачать датасет (см. раздел 2).
 
-3. Запустить обучение:
+3. **Препроцессинг данных**:
+
+```bash
+python src/preprocess.py --config configs/train.yaml
+```
+
+4. **Обучение модели**:
 
 ```bash
 python src/train.py --config configs/train.yaml
 ```
 
-4. Запустить тесты:
+5. **Инференс / top-N рекомендации**:
+
+```bash
+<Пока не реализовано>
+```
+
+6. **Запуск тестов**:
 
 ```bash
 pytest -q
 ```
 
+7. **Линтинг / автоформатирование**:
+
+```bash
+flake8 src/ tests/ --max-line-length=150 --ignore=W605,W503,E203  # проверка
+black src/ tests/  # автоформатирование
+```
+
 ---
 
-## 8. Формат сохранения модели
+## 9. Формат сохранения модели
 
-Модель должна иметь методы `save_pretrained(save_dir)` и `from_pretrained(load_dir)`; внутри можно сохранять:
+Модель имеет методы `save_pretrained(save_dir)` и `from_pretrained(load_dir)`. Сохраняется:
 
 * `pytorch_model.bin` (state_dict),
-* `config.json` (или копию `configs/train.yaml`).
+* `config.json` (копия конфигурации `train.yaml`).
 
-Это позволит легко загружать модель в будущем и использовать единый интерфейс для deploy.
-
----
-
-## 9. Точки контроля воспроизводимости
-
-* `random_seed` фиксируется в конфиге и применяется к `random`, `numpy`, `torch` (если используется).
-* В `requirements.txt` зафиксировать версии пакетов (чтобы повторить окружение).
-* В README и CI указать способ восстановления окружения и набор команд для запуска.
+Позволяет легко загружать модель для инференса или дальнейшего обучения.
 
 ---
 
-## 10. CI / тесты
+## 10. CI / GitHub Actions
 
-* GitHub Actions: установить окружение, `pip install -r requirements.txt`, `pytest`.
-* Тесты покрывают: чтение/валидация данных, корректность split, shape/тип батчей, корректность преобразования output→top-N.
+* Автоматический запуск тестов и линтера на каждый push.
+* Проверяет: чтение/валидацию данных, корректность split, shape/тип батчей, корректность преобразования output → top-N.
+* Все результаты логируются в Actions.
+* Автоматически завершает коммит, если тесты или линтер не пройдены.
 
 ---
+
+## 11. Воспроизводимость
+
+* Зафиксирован `random_seed` для `random`, `numpy` и `torch`.
+* Версии пакетов зафиксированы в `requirements.txt`.
+* Инструкции по воспроизведению пайплайна описаны в разделе 8.
+
+---
+
