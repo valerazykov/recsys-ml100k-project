@@ -13,9 +13,7 @@ def _make_rating_df(n_users=5, n_items=5, rating_value=3.0):
     rows = []
     ts = 0
     for u in range(n_users):
-        for i in range(
-            min(2, n_items)
-        ):  # a couple of interactions per user (small)
+        for i in range(min(2, n_items)):  # a couple of interactions per user (small)
             rows.append(
                 {
                     "user_idx": u,
@@ -35,9 +33,7 @@ def test_train_epoch_changes_parameters_and_returns_counts():
     loader = DataLoader(ds, batch_size=4, shuffle=False)
 
     # simple MF model on CPU
-    model = model_mod.MFModel(
-        n_users=5, n_items=5, embedding_dim=8, use_bias=True
-    )
+    model = model_mod.MFModel(n_users=5, n_items=5, embedding_dim=8, use_bias=True)
     device = torch.device("cpu")
     model.to(device)
 
@@ -68,9 +64,7 @@ def test_train_epoch_changes_parameters_and_returns_counts():
         if not torch.allclose(p.detach(), before[n], atol=1e-8):
             changed = True
             break
-    assert (
-        changed
-    ), "Expected at least one model parameter to change after train_epoch"
+    assert changed, "Expected at least one model parameter to change after train_epoch"
 
 
 def test_evaluate_rmse_perfect_prediction():
@@ -149,9 +143,7 @@ def test_evaluate_full_ranking_precision_one(tmp_path):
 
 
 def test_save_checkpoint_creates_files(tmp_path):
-    model = model_mod.MFModel(
-        n_users=4, n_items=4, embedding_dim=4, use_bias=True
-    )
+    model = model_mod.MFModel(n_users=4, n_items=4, embedding_dim=4, use_bias=True)
     optimizer = torch.optim.SGD(model.parameters(), lr=1e-2)
     save_dir = str(tmp_path / "chk")
     engine_mod.save_checkpoint(

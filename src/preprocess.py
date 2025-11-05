@@ -13,9 +13,7 @@ logger = logging.getLogger(__name__)
 
 def setup_logging(level: str = "INFO", log_file: str = None):
     fmt = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
-    logging.basicConfig(
-        level=getattr(logging, level.upper(), "INFO"), format=fmt
-    )
+    logging.basicConfig(level=getattr(logging, level.upper(), "INFO"), format=fmt)
     if log_file:
         fh = logging.FileHandler(log_file)
         fh.setFormatter(logging.Formatter(fmt))
@@ -78,9 +76,7 @@ def validate_ratings_df(df: pd.DataFrame):
         )
 
     if df[["user_id", "item_id", "rating", "timestamp"]].isnull().any().any():
-        raise ValueError(
-            "Ratings dataframe contains NaN values in required columns"
-        )
+        raise ValueError("Ratings dataframe contains NaN values in required columns")
 
     if not np.issubdtype(df["rating"].dtype, np.number):
         raise ValueError("Rating column must be numeric")
@@ -176,16 +172,8 @@ def leave_one_out_split(
             continue
 
     train_df = pd.DataFrame(train_rows)
-    val_df = (
-        pd.DataFrame(val_rows)
-        if val_rows
-        else pd.DataFrame(columns=df.columns)
-    )
-    test_df = (
-        pd.DataFrame(test_rows)
-        if test_rows
-        else pd.DataFrame(columns=df.columns)
-    )
+    val_df = pd.DataFrame(val_rows) if val_rows else pd.DataFrame(columns=df.columns)
+    test_df = pd.DataFrame(test_rows) if test_rows else pd.DataFrame(columns=df.columns)
 
     # ensure columns
     for col in df.columns:
@@ -238,9 +226,7 @@ def save_processed_splits(
     _safe_save(train_df, train_path)
     _safe_save(val_df, val_path)
     _safe_save(test_df, test_path)
-    logger.info(
-        f"Saved processed splits to {out_dir}: train.csv / val.csv / test.csv"
-    )
+    logger.info(f"Saved processed splits to {out_dir}: train.csv / val.csv / test.csv")
 
 
 def preprocess_from_config(cfg: dict, write_config_back: bool = False) -> dict:
@@ -269,9 +255,7 @@ def preprocess_from_config(cfg: dict, write_config_back: bool = False) -> dict:
     processed_dir = os.path.join(ml100k_dir, "processed")
 
     if ratings_file is None:
-        raise ValueError(
-            "ratings_file must be set in config under data.ratings_file"
-        )
+        raise ValueError("ratings_file must be set in config under data.ratings_file")
 
     # load
     logger.info(f"Loading ratings from {ratings_file}")
@@ -285,9 +269,7 @@ def preprocess_from_config(cfg: dict, write_config_back: bool = False) -> dict:
 
     # build mappings
     user2idx, item2idx = build_id_mappings(ratings)
-    logger.info(
-        f"Built id mappings: n_users={len(user2idx)}, n_items={len(item2idx)}"
-    )
+    logger.info(f"Built id mappings: n_users={len(user2idx)}, n_items={len(item2idx)}")
 
     # apply mappings
     ratings_mapped = apply_mappings(ratings, user2idx, item2idx)
@@ -326,15 +308,9 @@ def preprocess_from_config(cfg: dict, write_config_back: bool = False) -> dict:
                 with open(cfg_path, "r", encoding="utf-8") as f:
                     cfg_disk = yaml.safe_load(f)
                 # ensure nested keys exist
-                cfg_disk.setdefault("model", {}).setdefault(
-                    "model_init_args", {}
-                )
-                cfg_disk["model"]["model_init_args"]["n_users"] = meta[
-                    "n_users"
-                ]
-                cfg_disk["model"]["model_init_args"]["n_items"] = meta[
-                    "n_items"
-                ]
+                cfg_disk.setdefault("model", {}).setdefault("model_init_args", {})
+                cfg_disk["model"]["model_init_args"]["n_users"] = meta["n_users"]
+                cfg_disk["model"]["model_init_args"]["n_items"] = meta["n_items"]
                 with open(cfg_path, "w", encoding="utf-8") as f:
                     yaml.safe_dump(cfg_disk, f, sort_keys=False)
                 logger.info(f"Wrote n_users/n_items into config at {cfg_path}")

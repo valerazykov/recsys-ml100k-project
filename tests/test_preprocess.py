@@ -22,9 +22,7 @@ def test_filter_and_mappings_roundtrip(small_ratings_df):
     mapped = pp.apply_mappings(filtered, user2idx, item2idx)
     assert "user_idx" in mapped.columns and "item_idx" in mapped.columns
     # indices are ints and 0-based
-    assert (
-        mapped["user_idx"].dtype == int or mapped["user_idx"].dtype == np.int64
-    )
+    assert mapped["user_idx"].dtype == int or mapped["user_idx"].dtype == np.int64
     assert mapped["user_idx"].min() == 0
 
 

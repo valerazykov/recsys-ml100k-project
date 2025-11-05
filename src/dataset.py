@@ -46,9 +46,7 @@ class RatingDataset(Dataset):
             interactions = read_interaction_csv(interactions)
         self.df = interactions.reset_index(drop=True)
         if "rating" not in self.df.columns:
-            raise ValueError(
-                "RatingDataset expects 'rating' column in interactions"
-            )
+            raise ValueError("RatingDataset expects 'rating' column in interactions")
         # ensure integer indices
         self.users = self.df["user_idx"].astype(int).to_numpy()
         self.items = self.df["item_idx"].astype(int).to_numpy()
@@ -352,15 +350,9 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--train", type=str, default="data/ml-100k/processed/train.csv"
-    )
-    parser.add_argument(
-        "--val", type=str, default="data/ml-100k/processed/val.csv"
-    )
-    parser.add_argument(
-        "--test", type=str, default="data/ml-100k/processed/test.csv"
-    )
+    parser.add_argument("--train", type=str, default="data/ml-100k/processed/train.csv")
+    parser.add_argument("--val", type=str, default="data/ml-100k/processed/val.csv")
+    parser.add_argument("--test", type=str, default="data/ml-100k/processed/test.csv")
     parser.add_argument("--model-type", type=str, default="mf")
     parser.add_argument("--batch-size", type=int, default=512)
     parser.add_argument("--num-workers", type=int, default=0)

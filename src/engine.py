@@ -40,9 +40,7 @@ def save_checkpoint(
     try:
         if hasattr(model, "save_pretrained"):
             model.save_pretrained(save_dir, config=config)
-            logger.info(
-                f"Saved model weights/config via save_pretrained to {save_dir}"
-            )
+            logger.info(f"Saved model weights/config via save_pretrained to {save_dir}")
         else:
             model_path = os.path.join(save_dir, "pytorch_model.bin")
             torch.save(model.state_dict(), model_path)
@@ -96,9 +94,7 @@ def train_epoch(
             scaler.scale(loss).backward()
             if max_grad_norm is not None:
                 scaler.unscale_(optimizer)
-                torch.nn.utils.clip_grad_norm_(
-                    model.parameters(), max_grad_norm
-                )
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm)
             scaler.step(optimizer)
             scaler.update()
             batch_loss = float(loss.item())
@@ -120,9 +116,7 @@ def train_epoch(
             scaler.scale(loss).backward()
             if max_grad_norm is not None:
                 scaler.unscale_(optimizer)
-                torch.nn.utils.clip_grad_norm_(
-                    model.parameters(), max_grad_norm
-                )
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm)
             scaler.step(optimizer)
             scaler.update()
             batch_loss = float(loss.item())
@@ -225,9 +219,7 @@ def evaluate(
     # Full-ranking evaluation using src.metrics.evaluate_ranking_full
     if compute_full_ranking:
         if n_items is None:
-            raise ValueError(
-                "n_items must be provided for full ranking evaluation."
-            )
+            raise ValueError("n_items must be provided for full ranking evaluation.")
         if len(ground_truth) == 0:
             raise ValueError(
                 "Could not extract ground truth for ranking evaluation from dataloader.dataset.df"
@@ -251,8 +243,6 @@ def evaluate(
         metrics["recall@k"] = ranking_res.get(
             "recall@k", ranking_res.get("recall", 0.0)
         )
-        metrics["ndcg@k"] = ranking_res.get(
-            "ndcg@k", ranking_res.get("ndcg", 0.0)
-        )
+        metrics["ndcg@k"] = ranking_res.get("ndcg@k", ranking_res.get("ndcg", 0.0))
 
     return metrics

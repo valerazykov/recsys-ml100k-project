@@ -19,9 +19,7 @@ logger = utils.logger
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Train script for recsys project"
-    )
+    parser = argparse.ArgumentParser(description="Train script for recsys project")
     parser.add_argument(
         "--config",
         type=str,
@@ -65,9 +63,7 @@ def apply_overrides(cfg: Dict[str, Any], overrides: Optional[list]):
     # Very simple parser for key=value pairs; supports dot notation for nested keys.
     for kv in overrides:
         if "=" not in kv:
-            logger.warning(
-                f"Ignoring invalid override '{kv}', expected key=value."
-            )
+            logger.warning(f"Ignoring invalid override '{kv}', expected key=value.")
             continue
         k, v = kv.split("=", 1)
         # Try to interpret v as int/float/bool/json, fallback to string
@@ -250,9 +246,7 @@ def debug_train_batch(dataloader, model, device, model_type):
 
         loss.backward()
         for name, param in model.named_parameters():
-            grad_norm = (
-                param.grad.norm().item() if param.grad is not None else None
-            )
+            grad_norm = param.grad.norm().item() if param.grad is not None else None
             print(f"Param: {name}, grad norm: {grad_norm}")
 
         optimizer.step()
@@ -268,9 +262,7 @@ def debug_train_batch(dataloader, model, device, model_type):
         print("Initial BPR loss:", loss.item())
         loss.backward()
         for name, param in model.named_parameters():
-            grad_norm = (
-                param.grad.norm().item() if param.grad is not None else None
-            )
+            grad_norm = param.grad.norm().item() if param.grad is not None else None
             print(f"Param: {name}, grad norm: {grad_norm}")
         optimizer.step()
     print("=== DEBUG END ===\n")
@@ -313,9 +305,7 @@ def main():
 
     # fallback: if processed files exist and meta empty, try to infer
     processed_dir = cfg.get("data", {}).get("ml100k_dir")
-    processed_subdir = os.path.join(
-        processed_dir or "data/ml-100k", "processed"
-    )
+    processed_subdir = os.path.join(processed_dir or "data/ml-100k", "processed")
     train_path = cfg.get("data", {}).get("train_path") or os.path.join(
         processed_subdir, "train.csv"
     )
@@ -394,9 +384,7 @@ def main():
         model_init_args["n_items"] = dataloaders.n_items
     model_cfg["model_init_args"] = model_init_args
 
-    logger.info(
-        f"Building model from config. model_cfg keys: {list(model_cfg.keys())}"
-    )
+    logger.info(f"Building model from config. model_cfg keys: {list(model_cfg.keys())}")
     model = model_mod.build_model_from_cfg(model_cfg)
     # device handling
     device_str = train_cfg.get("device", "cpu")
@@ -412,9 +400,7 @@ def main():
     # optionally resume weights
     if args.resume:
         try:
-            model, _ = (
-                model_mod.MFModel.from_pretrained
-            )  # dummy to avoid lint
+            model, _ = model_mod.MFModel.from_pretrained  # dummy to avoid lint
         except Exception:
             pass
         # we use BaseRecModel.from_pretrained on appropriate class - try to detect by cfg
@@ -497,19 +483,13 @@ def main():
                 n_items=dataloaders.n_items,
                 eval_full_batch_size=eval_full_batch,
             )
-            logger.info(
-                f"Epoch {epoch} val metrics: {json.dumps(val_metrics)}"
-            )
+            logger.info(f"Epoch {epoch} val metrics: {json.dumps(val_metrics)}")
             metrics_log["val"].append({"epoch": epoch, **val_metrics})
             # scheduler step for ReduceLROnPlateau expects metric
             if scheduler is not None:
-                if isinstance(
-                    scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau
-                ):
+                if isinstance(scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau):
                     # use validation loss or rmse
-                    monitor = val_metrics.get(
-                        "rmse", val_metrics.get("loss", None)
-                    )
+                    monitor = val_metrics.get("rmse", val_metrics.get("loss", None))
                     if monitor is not None:
                         scheduler.step(monitor)
                 else:
@@ -536,9 +516,7 @@ def main():
             and (not args.no_save)
         ):
             logger.info(f"Saving checkpoint at epoch {epoch}")
-            engine.save_checkpoint(
-                model, optimizer, epoch, save_dir, config=cfg
-            )
+            engine.save_checkpoint(model, optimizer, epoch, save_dir, config=cfg)
 
     # final evaluation on test (if available)
     if dataloaders.test is not None:
@@ -563,9 +541,7 @@ def main():
     if not args.no_save:
         logger.info("Saving final model and metrics...")
         try:
-            engine.save_checkpoint(
-                model, optimizer, epoch, save_dir, config=cfg
-            )
+            engine.save_checkpoint(model, optimizer, epoch, save_dir, config=cfg)
         except Exception:
             logger.exception("Failed to save final model.")
 

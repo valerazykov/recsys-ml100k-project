@@ -162,9 +162,7 @@ class MFModel(BaseRecModel):
 
         if self.clamp_preds:
             if (self.min_rating is None) or (self.max_rating is None):
-                raise ValueError(
-                    "clamp_preds=True but min_rating/max_rating not set"
-                )
+                raise ValueError("clamp_preds=True but min_rating/max_rating not set")
             out = torch.clamp(out, min=self.min_rating, max=self.max_rating)
         return out
 
@@ -217,9 +215,7 @@ class NCFModel(BaseRecModel):
         self.n_users = int(n_users)
         self.n_items = int(n_items)
         self.embedding_dim = int(embedding_dim)
-        self.hidden_dims = (
-            list(hidden_dims) if hidden_dims is not None else [128, 64]
-        )
+        self.hidden_dims = list(hidden_dims) if hidden_dims is not None else [128, 64]
         self.dropout = float(dropout)
         self.clamp_preds = bool(clamp_preds)
         self.min_rating = min_rating
@@ -262,9 +258,7 @@ class NCFModel(BaseRecModel):
         out = self.mlp(x).squeeze(-1)  # (batch,)
         if self.clamp_preds:
             if (self.min_rating is None) or (self.max_rating is None):
-                raise ValueError(
-                    "clamp_preds=True but min_rating/max_rating not set"
-                )
+                raise ValueError("clamp_preds=True but min_rating/max_rating not set")
             out = torch.clamp(out, min=self.min_rating, max=self.max_rating)
         return out
 
@@ -284,9 +278,7 @@ class NCFModel(BaseRecModel):
         return out.cpu()
 
 
-def _filter_init_args_for_class(
-    init_args: Dict[str, Any], cls
-) -> Dict[str, Any]:
+def _filter_init_args_for_class(init_args: Dict[str, Any], cls) -> Dict[str, Any]:
     """
     Keep only keys that are accepted by cls.__init__ (excluding 'self').
     """
@@ -294,8 +286,7 @@ def _filter_init_args_for_class(
     valid_params = [
         p.name
         for p in sig.parameters.values()
-        if p.name != "self"
-        and p.kind in (p.POSITIONAL_OR_KEYWORD, p.KEYWORD_ONLY)
+        if p.name != "self" and p.kind in (p.POSITIONAL_OR_KEYWORD, p.KEYWORD_ONLY)
     ]
     filtered = {}
     for k, v in init_args.items():
@@ -345,9 +336,7 @@ def build_model_from_cfg(model_cfg: Dict[str, Any]) -> BaseRecModel:
         filtered_args = _filter_init_args_for_class(init_args, NCFModel)
         return NCFModel(**filtered_args)
     else:
-        raise ValueError(
-            f"Unknown model type: {mtype}. Supported: 'mf', 'ncf'."
-        )
+        raise ValueError(f"Unknown model type: {mtype}. Supported: 'mf', 'ncf'.")
 
 
 # Example quick smoke test when run as script

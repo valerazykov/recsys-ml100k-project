@@ -38,9 +38,7 @@ def precision_at_k_single(
     return hits / float(len(recs))
 
 
-def recall_at_k_single(
-    recommended: Sequence[int], true_set: Set[int], k: int
-) -> float:
+def recall_at_k_single(recommended: Sequence[int], true_set: Set[int], k: int) -> float:
     """
     Recall@k for a single user: fraction of relevant items that are present in top-k recommendations.
     If true_set is empty, returns 0.0.
@@ -52,9 +50,7 @@ def recall_at_k_single(
     return hits / float(len(true_set))
 
 
-def ndcg_at_k_single(
-    recommended: Sequence[int], true_set: Set[int], k: int
-) -> float:
+def ndcg_at_k_single(recommended: Sequence[int], true_set: Set[int], k: int) -> float:
     """
     NDCG@k for a single user.
     DCG = sum_{i=1..k} rel_i / log2(i+1) where rel_i is 1 if recommended[i-1] in true_set else 0
@@ -165,9 +161,7 @@ def evaluate_ranking_full(
                 )
                 users_t = torch.from_numpy(users_chunk).long().to(model_device)
                 items_t = torch.from_numpy(items_chunk).long().to(model_device)
-                chunk_scores = model(
-                    users_t, items_t
-                )  # expects (batch,) tensor
+                chunk_scores = model(users_t, items_t)  # expects (batch,) tensor
                 scores_chunks.append(chunk_scores.cpu().numpy())
             scores = np.concatenate(scores_chunks, axis=0)  # shape (n_items,)
             # get top-k item indices
