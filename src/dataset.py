@@ -162,7 +162,7 @@ def build_user_pos_dict(df: pd.DataFrame) -> Dict[int, set]:
 
 
 def _collate_rating_batch(
-    batch: List[Tuple[torch.LongTensor, torch.LongTensor, torch.FloatTensor]]
+    batch: List[Tuple[torch.LongTensor, torch.LongTensor, torch.FloatTensor]],
 ):
     users = torch.stack([b[0] for b in batch])
     items = torch.stack([b[1] for b in batch])
@@ -171,7 +171,7 @@ def _collate_rating_batch(
 
 
 def _collate_bpr_batch(
-    batch: List[Tuple[torch.LongTensor, torch.LongTensor, torch.LongTensor]]
+    batch: List[Tuple[torch.LongTensor, torch.LongTensor, torch.LongTensor]],
 ):
     users = torch.stack([b[0] for b in batch])
     pos = torch.stack([b[1] for b in batch])
