@@ -6,10 +6,12 @@ on:
     branches:
       - main
       - develop
+      - tasks_1-3
   pull_request:
     branches:
       - main
       - develop
+      - tasks_1-3
 
 jobs:
   test:
