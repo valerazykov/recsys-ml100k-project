@@ -47,7 +47,9 @@ def compute_file_hash(path: str, algo: str = "sha256") -> str:
 def git_commit_hash() -> Optional[str]:
     """Return current git commit hash or None if git not available."""
     try:
-        out = subprocess.check_output(["git", "rev-parse", "HEAD"], stderr=subprocess.DEVNULL)
+        out = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], stderr=subprocess.DEVNULL
+        )
         return out.decode().strip()
     except Exception:
         return None
@@ -62,7 +64,9 @@ def mlflow_start_run_from_cfg(cfg: Dict, experiment_name: Optional[str] = None):
     """
     # decide experiment name
     if experiment_name is None:
-        experiment_name = cfg.get("mlflow", {}).get("experiment_name", "recsys-experiment")
+        experiment_name = cfg.get("mlflow", {}).get(
+            "experiment_name", "recsys-experiment"
+        )
     mlflow.set_experiment(experiment_name)
 
     mlflow.start_run()  # autogenerates run name/id
@@ -71,13 +75,17 @@ def mlflow_start_run_from_cfg(cfg: Dict, experiment_name: Optional[str] = None):
     # optional: log some important train params
     train_cfg = cfg.get("train", {})
     model_cfg = cfg.get("model", {})
-    mlflow.log_params({
-        "epochs": int(train_cfg.get("epochs", 0)),
-        "batch_size": int(train_cfg.get("batch_size", 0)),
-        "lr": float(train_cfg.get("lr", 0.0) or train_cfg.get("learning_rate", 0.0)),
-        "model_type": model_cfg.get("type", None),
-        "embedding_dim": model_cfg.get("embedding_dim", None),
-    })
+    mlflow.log_params(
+        {
+            "epochs": int(train_cfg.get("epochs", 0)),
+            "batch_size": int(train_cfg.get("batch_size", 0)),
+            "lr": float(
+                train_cfg.get("lr", 0.0) or train_cfg.get("learning_rate", 0.0)
+            ),
+            "model_type": model_cfg.get("type", None),
+            "embedding_dim": model_cfg.get("embedding_dim", None),
+        }
+    )
 
     # Git commit tag
     commit = git_commit_hash()
@@ -110,7 +118,11 @@ def mlflow_log_epoch_metrics(epoch: int, metrics: Dict[str, float]):
         mlflow.log_metrics(safe_metrics, step=epoch)
 
 
-def mlflow_log_artifacts_and_meta(model_dir: str, metrics_path: Optional[str] = None, dvc_lock_path: Optional[str] = None):
+def mlflow_log_artifacts_and_meta(
+    model_dir: str,
+    metrics_path: Optional[str] = None,
+    dvc_lock_path: Optional[str] = None,
+):
     """Log artifacts: model_dir (all files), metrics json, dvc.lock file. Also log dvc.lock hash as tag."""
     # log model directory as artifacts/model
     if os.path.exists(model_dir):

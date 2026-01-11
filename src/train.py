@@ -523,7 +523,9 @@ def main():
                     )
 
         # log epoch metrics to mlflow
-        mlflow_utils.mlflow_log_epoch_metrics(epoch, {"train_loss": train_res["loss"], **val_metrics})
+        mlflow_utils.mlflow_log_epoch_metrics(
+            epoch, {"train_loss": train_res["loss"], **val_metrics}
+        )
 
         # optionally checkpoint every N epochs
         if (
@@ -573,9 +575,10 @@ def main():
     # ensure metrics json path (we already save metrics in code to artifacts/model/metrics.json)
     metrics_path = os.path.join(save_dir, "metrics.json")
     dvc_lock = os.path.join(os.getcwd(), "dvc.lock")
-    mlflow_utils.mlflow_log_artifacts_and_meta(model_dir=save_dir, metrics_path=metrics_path, dvc_lock_path=dvc_lock)
+    mlflow_utils.mlflow_log_artifacts_and_meta(
+        model_dir=save_dir, metrics_path=metrics_path, dvc_lock_path=dvc_lock
+    )
     mlflow_utils.mlflow_end_run()
-
 
     logger.info("Training finished.")
     if best_epoch > 0:
