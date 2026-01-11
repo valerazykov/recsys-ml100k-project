@@ -1,4 +1,4 @@
-data/*
+data/ml-100k.zip
 tests/__pycache__/*
 __pycache__
 src/__pycache__/*
