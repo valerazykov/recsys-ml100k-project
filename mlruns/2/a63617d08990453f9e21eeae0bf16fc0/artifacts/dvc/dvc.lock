@@ -44,13 +44,13 @@ stages:
       size: 13082
     - path: src/train.py
       hash: md5
-      md5: ec1473e47c8ad0015787c2821e2217ef
-      size: 21191
+      md5: 47b3c0853c843f691dc6a08f7dcc18f6
+      size: 20288
     outs:
     - path: artifacts/model
       hash: md5
-      md5: 8c522b7d2fd64d1832ece610e03a4502.dir
-      size: 22147462
+      md5: f54d40515a6000c229092cf40dd8317f.dir
+      size: 22147389
       nfiles: 22
   evaluate:
     cmd: python -m src.evaluate --config configs/train.yaml --model-dir 
@@ -58,8 +58,8 @@ stages:
     deps:
     - path: artifacts/model
       hash: md5
-      md5: 8c522b7d2fd64d1832ece610e03a4502.dir
-      size: 22147462
+      md5: f54d40515a6000c229092cf40dd8317f.dir
+      size: 22147389
       nfiles: 22
     - path: configs/train.yaml
       hash: md5
@@ -67,8 +67,8 @@ stages:
       size: 2307
     - path: src/evaluate.py
       hash: md5
-      md5: 857578f0e8f9c7322dbbb2c8f7340c14
-      size: 7802
+      md5: 660192b76845667af61fae60c73f59fa
+      size: 7813
     outs:
     - path: artifacts/metrics/metrics_eval.json
       hash: md5

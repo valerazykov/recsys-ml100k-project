@@ -1,0 +1,88 @@
+{
+  "data": {
+    "ml100k_dir": "data",
+    "ratings_file": "data/ml-100k/u.data",
+    "users_file": "data/ml-100k/u.user",
+    "items_file": "data/ml-100k/u.item",
+    "sep": "\t",
+    "min_user_interactions": 5,
+    "min_item_interactions": 5
+  },
+  "seed": 42,
+  "train": {
+    "model_type": "mf",
+    "epochs": 20,
+    "batch_size": 1024,
+    "lr": 0.001,
+    "weight_decay": "1e-5",
+    "device": "cuda",
+    "validate_every": 1,
+    "use_amp": true,
+    "num_workers": 0,
+    "checkpoint_every": 5,
+    "verbose": true
+  },
+  "model": {
+    "type": "mf",
+    "embedding_dim": 64,
+    "ncf_hidden": [
+      128,
+      64
+    ],
+    "dropout": 0.2,
+    "clamp_preds": false,
+    "min_rating": 1.0,
+    "max_rating": 5.0,
+    "model_init_args": {
+      "n_users": 943,
+      "n_items": 1349,
+      "embedding_dim": 64,
+      "ncf_hidden": [
+        128,
+        64
+      ],
+      "dropout": 0.2
+    }
+  },
+  "optimizer": {
+    "name": "adam",
+    "params": {
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": "1e-8"
+    }
+  },
+  "scheduler": {
+    "use": true,
+    "type": "reduce_on_plateau",
+    "params": {
+      "mode": "min",
+      "factor": 0.5,
+      "patience": 3,
+      "min_lr": "1e-6"
+    }
+  },
+  "save": {
+    "save_dir": "artifacts/model",
+    "save_config": true,
+    "save_metrics": true,
+    "keep_last_k": 3
+  },
+  "metrics": {
+    "eval_topk": 10,
+    "compute_full_ranking": true
+  },
+  "logging": {
+    "level": "INFO",
+    "log_file": "artifacts/train.log"
+  },
+  "evaluation": {
+    "eval_batch_size": 1024,
+    "full_ranking_batch": 4096
+  },
+  "notes": "- После выполнения препроцессинга (src/preprocess.py) заполните:\n    model.model_init_args.n_users  и model.model_init_args.n_items\n  либо сделайте это автоматически в коде train.py.\n- Любые значения можно переопределить через CLI-параметры при запуске train.py.\n- Для локального тестирования на CPU поменяйте train.device на \"cpu\" и уменьшите batch_size.\n",
+  "_config_path": "configs/train.yaml",
+  "model_init_args": {}
+}

@@ -1342,3 +1342,556 @@
 2026-01-11 20:30:46,344 | INFO | __main__ | Git SHA: f9063d30b4f3a7eed79b1beea90d18af273c54c0
 2026-01-11 20:30:46,344 | INFO | __main__ | Found dvc.lock in repo root (pipeline hash information available).
 2026-01-11 20:30:46,344 | INFO | __main__ | Evaluation finished.
+2026-01-11 22:44:26,272 | INFO | src.utils | Loaded config from configs/train.yaml
+2026-01-11 22:44:26,666 | INFO | __name__ | setup plugin alembic.autogenerate.schemas
+2026-01-11 22:44:26,666 | INFO | __name__ | setup plugin alembic.autogenerate.tables
+2026-01-11 22:44:26,666 | INFO | __name__ | setup plugin alembic.autogenerate.types
+2026-01-11 22:44:26,666 | INFO | __name__ | setup plugin alembic.autogenerate.constraints
+2026-01-11 22:44:26,666 | INFO | __name__ | setup plugin alembic.autogenerate.defaults
+2026-01-11 22:44:26,666 | INFO | __name__ | setup plugin alembic.autogenerate.comments
+2026-01-11 22:44:27,305 | INFO | src.utils | Set python and numpy seed to 42
+2026-01-11 22:44:27,309 | INFO | src.utils | Configured torch.backends.cudnn for deterministic behavior (may be slower).
+2026-01-11 22:44:27,333 | INFO | src.utils | Inferred n_users=943, n_items=1349 from processed files.
+2026-01-11 22:44:27,333 | INFO | src.utils | Preparing dataloaders with model_type=mf, batch_size=1024, num_workers=0
+2026-01-11 22:44:27,353 | INFO | src.dataset | Loaded interactions: train=97401 val=943 test=943
+2026-01-11 22:44:27,355 | INFO | src.utils | Building model from config. model_cfg keys: ['type', 'embedding_dim', 'ncf_hidden', 'dropout', 'clamp_preds', 'min_rating', 'max_rating', 'model_init_args']
+2026-01-11 22:44:27,371 | WARNING | src.utils | CUDA requested in config but not available. Falling back to CPU.
+2026-01-11 22:44:27,374 | INFO | src.utils | Model built and moved to device cpu
+2026-01-11 22:44:28,630 | INFO | src.utils | Built optimizer adam lr=0.001 betas=(0.9, 0.999) eps=1e-08 weight_decay=0.0
+2026-01-11 22:44:28,630 | INFO | src.utils | Starting training for 20 epochs. use_amp=True
+2026-01-11 22:44:29,598 | INFO | src.utils | Epoch 1 train loss: 13.100875, examples=97401, time=0.9s
+2026-01-11 22:44:29,756 | INFO | src.utils | Epoch 1 val metrics: {"loss": 11.660715103149414, "rmse": 3.414779036889794, "precision@k": 0.0032873806998939556, "recall@k": 0.032873806998939555, "ndcg@k": 0.016958897501901788}
+2026-01-11 22:44:29,756 | INFO | src.utils | New best val RMSE 3.414779 at epoch 1. Saving best model.
+2026-01-11 22:44:29,765 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_1.pth
+2026-01-11 22:44:29,767 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:29,768 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:29,768 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:30,656 | INFO | src.utils | Epoch 2 train loss: 7.885414, examples=97401, time=0.9s
+2026-01-11 22:44:30,794 | INFO | src.utils | Epoch 2 val metrics: {"loss": 5.2383131980896, "rmse": 2.288736170648413, "precision@k": 0.003817603393425239, "recall@k": 0.03817603393425239, "ndcg@k": 0.017991009340194944}
+2026-01-11 22:44:30,794 | INFO | src.utils | New best val RMSE 2.288736 at epoch 2. Saving best model.
+2026-01-11 22:44:30,798 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_2.pth
+2026-01-11 22:44:30,802 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:30,805 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:30,805 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:31,618 | INFO | src.utils | Epoch 3 train loss: 2.154299, examples=97401, time=0.8s
+2026-01-11 22:44:31,759 | INFO | src.utils | Epoch 3 val metrics: {"loss": 2.1447393894195557, "rmse": 1.4644928861476474, "precision@k": 0.0031813361611876994, "recall@k": 0.031813361611876985, "ndcg@k": 0.01517125633207741}
+2026-01-11 22:44:31,759 | INFO | src.utils | New best val RMSE 1.464493 at epoch 3. Saving best model.
+2026-01-11 22:44:31,762 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_3.pth
+2026-01-11 22:44:31,767 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:31,767 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:31,767 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:32,653 | INFO | src.utils | Epoch 4 train loss: 1.135198, examples=97401, time=0.9s
+2026-01-11 22:44:32,795 | INFO | src.utils | Epoch 4 val metrics: {"loss": 1.464943289756775, "rmse": 1.210348398103588, "precision@k": 0.0033934252386002123, "recall@k": 0.033934252386002124, "ndcg@k": 0.013792534408467054}
+2026-01-11 22:44:32,795 | INFO | src.utils | New best val RMSE 1.210348 at epoch 4. Saving best model.
+2026-01-11 22:44:32,800 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_4.pth
+2026-01-11 22:44:32,803 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:32,804 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:32,804 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:33,739 | INFO | src.utils | Epoch 5 train loss: 0.961876, examples=97401, time=0.9s
+2026-01-11 22:44:33,885 | INFO | src.utils | Epoch 5 val metrics: {"loss": 1.2217198610305786, "rmse": 1.1053143111065875, "precision@k": 0.0028632025450689292, "recall@k": 0.02863202545068929, "ndcg@k": 0.01283065540849641}
+2026-01-11 22:44:33,885 | INFO | src.utils | New best val RMSE 1.105314 at epoch 5. Saving best model.
+2026-01-11 22:44:33,888 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_5.pth
+2026-01-11 22:44:33,890 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:33,891 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:33,891 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:33,898 | INFO | src.utils | Saving checkpoint at epoch 5
+2026-01-11 22:44:33,901 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_5.pth
+2026-01-11 22:44:33,903 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:33,904 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:33,904 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:34,700 | INFO | src.utils | Epoch 6 train loss: 0.900813, examples=97401, time=0.8s
+2026-01-11 22:44:34,866 | INFO | src.utils | Epoch 6 val metrics: {"loss": 1.1138958930969238, "rmse": 1.0554126766774587, "precision@k": 0.0032873806998939556, "recall@k": 0.032873806998939555, "ndcg@k": 0.014827981769737169}
+2026-01-11 22:44:34,866 | INFO | src.utils | New best val RMSE 1.055413 at epoch 6. Saving best model.
+2026-01-11 22:44:34,870 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_6.pth
+2026-01-11 22:44:34,871 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:34,872 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:34,872 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:35,809 | INFO | src.utils | Epoch 7 train loss: 0.873560, examples=97401, time=0.9s
+2026-01-11 22:44:36,018 | INFO | src.utils | Epoch 7 val metrics: {"loss": 1.0591518878936768, "rmse": 1.0291510648250632, "precision@k": 0.0030752916224814422, "recall@k": 0.030752916224814422, "ndcg@k": 0.01386557924601208}
+2026-01-11 22:44:36,019 | INFO | src.utils | New best val RMSE 1.029151 at epoch 7. Saving best model.
+2026-01-11 22:44:36,021 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_7.pth
+2026-01-11 22:44:36,026 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:36,028 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:36,028 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:36,901 | INFO | src.utils | Epoch 8 train loss: 0.859406, examples=97401, time=0.9s
+2026-01-11 22:44:37,042 | INFO | src.utils | Epoch 8 val metrics: {"loss": 1.0319842100143433, "rmse": 1.01586620391903, "precision@k": 0.0029692470837751855, "recall@k": 0.029692470837751856, "ndcg@k": 0.013698070431741068}
+2026-01-11 22:44:37,042 | INFO | src.utils | New best val RMSE 1.015866 at epoch 8. Saving best model.
+2026-01-11 22:44:37,045 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_8.pth
+2026-01-11 22:44:37,050 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:37,052 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:37,052 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:37,830 | INFO | src.utils | Epoch 9 train loss: 0.851154, examples=97401, time=0.8s
+2026-01-11 22:44:37,975 | INFO | src.utils | Epoch 9 val metrics: {"loss": 1.0215556621551514, "rmse": 1.0107203972631231, "precision@k": 0.0028632025450689292, "recall@k": 0.02863202545068929, "ndcg@k": 0.013268311404458734}
+2026-01-11 22:44:37,975 | INFO | src.utils | New best val RMSE 1.010720 at epoch 9. Saving best model.
+2026-01-11 22:44:37,978 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_9.pth
+2026-01-11 22:44:37,982 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:37,984 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:37,984 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:38,866 | INFO | src.utils | Epoch 10 train loss: 0.845262, examples=97401, time=0.9s
+2026-01-11 22:44:39,018 | INFO | src.utils | Epoch 10 val metrics: {"loss": 1.008853793144226, "rmse": 1.0044171195791396, "precision@k": 0.002651113467656416, "recall@k": 0.026511134676564158, "ndcg@k": 0.012505454409405656}
+2026-01-11 22:44:39,018 | INFO | src.utils | New best val RMSE 1.004417 at epoch 10. Saving best model.
+2026-01-11 22:44:39,021 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_10.pth
+2026-01-11 22:44:39,023 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:39,023 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:39,024 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:39,030 | INFO | src.utils | Saving checkpoint at epoch 10
+2026-01-11 22:44:39,033 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_10.pth
+2026-01-11 22:44:39,035 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:39,035 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:39,036 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:39,895 | INFO | src.utils | Epoch 11 train loss: 0.833957, examples=97401, time=0.9s
+2026-01-11 22:44:40,037 | INFO | src.utils | Epoch 11 val metrics: {"loss": 1.0076426267623901, "rmse": 1.0038140905318809, "precision@k": 0.002969247083775186, "recall@k": 0.029692470837751856, "ndcg@k": 0.01338890362811036}
+2026-01-11 22:44:40,037 | INFO | src.utils | New best val RMSE 1.003814 at epoch 11. Saving best model.
+2026-01-11 22:44:40,040 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_11.pth
+2026-01-11 22:44:40,045 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:40,046 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:40,047 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:40,871 | INFO | src.utils | Epoch 12 train loss: 0.831208, examples=97401, time=0.8s
+2026-01-11 22:44:41,013 | INFO | src.utils | Epoch 12 val metrics: {"loss": 1.0089164972305298, "rmse": 1.0044483079142883, "precision@k": 0.0028632025450689292, "recall@k": 0.02863202545068929, "ndcg@k": 0.013438474088679597}
+2026-01-11 22:44:41,944 | INFO | src.utils | Epoch 13 train loss: 0.828688, examples=97401, time=0.9s
+2026-01-11 22:44:42,091 | INFO | src.utils | Epoch 13 val metrics: {"loss": 1.0042572021484375, "rmse": 1.002126326516932, "precision@k": 0.002969247083775186, "recall@k": 0.029692470837751856, "ndcg@k": 0.013396457153129916}
+2026-01-11 22:44:42,091 | INFO | src.utils | New best val RMSE 1.002126 at epoch 13. Saving best model.
+2026-01-11 22:44:42,098 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_13.pth
+2026-01-11 22:44:42,099 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:42,100 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:42,100 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:42,970 | INFO | src.utils | Epoch 14 train loss: 0.826525, examples=97401, time=0.9s
+2026-01-11 22:44:43,123 | INFO | src.utils | Epoch 14 val metrics: {"loss": 1.0008103847503662, "rmse": 1.0004051556603146, "precision@k": 0.002757158006362673, "recall@k": 0.027571580063626724, "ndcg@k": 0.012782427447916913}
+2026-01-11 22:44:43,124 | INFO | src.utils | New best val RMSE 1.000405 at epoch 14. Saving best model.
+2026-01-11 22:44:43,126 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_14.pth
+2026-01-11 22:44:43,128 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:43,128 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:43,128 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:44,164 | INFO | src.utils | Epoch 15 train loss: 0.824391, examples=97401, time=1.0s
+2026-01-11 22:44:44,337 | INFO | src.utils | Epoch 15 val metrics: {"loss": 0.9998170733451843, "rmse": 0.99990857757558, "precision@k": 0.0028632025450689292, "recall@k": 0.02863202545068929, "ndcg@k": 0.01341137512032559}
+2026-01-11 22:44:44,337 | INFO | src.utils | New best val RMSE 0.999909 at epoch 15. Saving best model.
+2026-01-11 22:44:44,340 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_15.pth
+2026-01-11 22:44:44,341 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:44,342 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:44,342 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:44,353 | INFO | src.utils | Saving checkpoint at epoch 15
+2026-01-11 22:44:44,357 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_15.pth
+2026-01-11 22:44:44,358 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:44,359 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:44,359 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:45,286 | INFO | src.utils | Epoch 16 train loss: 0.821847, examples=97401, time=0.9s
+2026-01-11 22:44:45,430 | INFO | src.utils | Epoch 16 val metrics: {"loss": 0.9977123737335205, "rmse": 0.9988555559707267, "precision@k": 0.002439024390243903, "recall@k": 0.024390243902439025, "ndcg@k": 0.012154997284838336}
+2026-01-11 22:44:45,430 | INFO | src.utils | New best val RMSE 0.998856 at epoch 16. Saving best model.
+2026-01-11 22:44:45,433 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_16.pth
+2026-01-11 22:44:45,435 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:45,435 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:45,435 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:46,324 | INFO | src.utils | Epoch 17 train loss: 0.819726, examples=97401, time=0.9s
+2026-01-11 22:44:46,509 | INFO | src.utils | Epoch 17 val metrics: {"loss": 0.9991518259048462, "rmse": 0.9995758232232953, "precision@k": 0.0025450689289501596, "recall@k": 0.02545068928950159, "ndcg@k": 0.012363351740830069}
+2026-01-11 22:44:47,445 | INFO | src.utils | Epoch 18 train loss: 0.817373, examples=97401, time=0.9s
+2026-01-11 22:44:47,603 | INFO | src.utils | Epoch 18 val metrics: {"loss": 0.9967241883277893, "rmse": 0.9983607434048545, "precision@k": 0.0022269353128313895, "recall@k": 0.022269353128313893, "ndcg@k": 0.01089509509962089}
+2026-01-11 22:44:47,604 | INFO | src.utils | New best val RMSE 0.998361 at epoch 18. Saving best model.
+2026-01-11 22:44:47,606 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_18.pth
+2026-01-11 22:44:47,610 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:47,614 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:47,614 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:48,623 | INFO | src.utils | Epoch 19 train loss: 0.814897, examples=97401, time=1.0s
+2026-01-11 22:44:48,776 | INFO | src.utils | Epoch 19 val metrics: {"loss": 0.9937300086021423, "rmse": 0.9968600443239133, "precision@k": 0.002014846235418876, "recall@k": 0.02014846235418876, "ndcg@k": 0.010296235273874446}
+2026-01-11 22:44:48,776 | INFO | src.utils | New best val RMSE 0.996860 at epoch 19. Saving best model.
+2026-01-11 22:44:48,779 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_19.pth
+2026-01-11 22:44:48,782 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:48,783 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:48,783 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:49,626 | INFO | src.utils | Epoch 20 train loss: 0.812477, examples=97401, time=0.8s
+2026-01-11 22:44:49,771 | INFO | src.utils | Epoch 20 val metrics: {"loss": 0.9931842684745789, "rmse": 0.9965863244941684, "precision@k": 0.002332979851537646, "recall@k": 0.02332979851537646, "ndcg@k": 0.010919477831110407}
+2026-01-11 22:44:49,772 | INFO | src.utils | New best val RMSE 0.996586 at epoch 20. Saving best model.
+2026-01-11 22:44:49,775 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_20.pth
+2026-01-11 22:44:49,778 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:49,779 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:49,779 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:49,807 | INFO | src.utils | Saving checkpoint at epoch 20
+2026-01-11 22:44:49,810 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_20.pth
+2026-01-11 22:44:49,817 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:49,820 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:49,820 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:49,982 | INFO | src.utils | Test metrics: {"loss": 1.0807641744613647, "rmse": 1.0395981400818823, "precision@k": 0.0020148462354188756, "recall@k": 0.02014846235418876, "ndcg@k": 0.009366333375316036}
+2026-01-11 22:44:49,982 | INFO | src.utils | Saving final model and metrics...
+2026-01-11 22:44:49,985 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_20.pth
+2026-01-11 22:44:49,987 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:44:49,988 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:44:49,988 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:44:49,989 | INFO | src.utils | Saved metrics to artifacts/model/metrics.json
+2026-01-11 22:44:49,992 | INFO | src.utils | Saved used config to artifacts/model/config_used.yaml
+2026-01-11 22:44:50,170 | INFO | src.utils | Training finished.
+2026-01-11 22:44:50,170 | INFO | src.utils | Best val RMSE 0.996586 at epoch 20
+2026-01-11 22:48:48,751 | INFO | src.utils | Loaded config from configs/train.yaml
+2026-01-11 22:48:49,193 | INFO | __name__ | setup plugin alembic.autogenerate.schemas
+2026-01-11 22:48:49,193 | INFO | __name__ | setup plugin alembic.autogenerate.tables
+2026-01-11 22:48:49,193 | INFO | __name__ | setup plugin alembic.autogenerate.types
+2026-01-11 22:48:49,193 | INFO | __name__ | setup plugin alembic.autogenerate.constraints
+2026-01-11 22:48:49,193 | INFO | __name__ | setup plugin alembic.autogenerate.defaults
+2026-01-11 22:48:49,193 | INFO | __name__ | setup plugin alembic.autogenerate.comments
+2026-01-11 22:48:49,841 | INFO | src.utils | Set python and numpy seed to 42
+2026-01-11 22:48:49,844 | INFO | src.utils | Configured torch.backends.cudnn for deterministic behavior (may be slower).
+2026-01-11 22:48:49,867 | INFO | src.utils | Inferred n_users=943, n_items=1349 from processed files.
+2026-01-11 22:48:49,867 | INFO | src.utils | Preparing dataloaders with model_type=mf, batch_size=1024, num_workers=0
+2026-01-11 22:48:49,886 | INFO | src.dataset | Loaded interactions: train=97401 val=943 test=943
+2026-01-11 22:48:49,887 | INFO | src.utils | Building model from config. model_cfg keys: ['type', 'embedding_dim', 'ncf_hidden', 'dropout', 'clamp_preds', 'min_rating', 'max_rating', 'model_init_args']
+2026-01-11 22:48:49,930 | WARNING | src.utils | CUDA requested in config but not available. Falling back to CPU.
+2026-01-11 22:48:49,933 | INFO | src.utils | Model built and moved to device cpu
+2026-01-11 22:48:51,363 | INFO | src.utils | Built optimizer adam lr=0.001 betas=(0.9, 0.999) eps=1e-08 weight_decay=0.0
+2026-01-11 22:48:51,363 | INFO | src.utils | Starting training for 20 epochs. use_amp=True
+2026-01-11 22:48:52,302 | INFO | src.utils | Epoch 1 train loss: 13.100875, examples=97401, time=0.9s
+2026-01-11 22:48:52,449 | INFO | src.utils | Epoch 1 val metrics: {"loss": 11.660715103149414, "rmse": 3.414779036889794, "precision@k": 0.0032873806998939556, "recall@k": 0.032873806998939555, "ndcg@k": 0.016958897501901788}
+2026-01-11 22:48:52,449 | INFO | src.utils | New best val RMSE 3.414779 at epoch 1. Saving best model.
+2026-01-11 22:48:52,460 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_1.pth
+2026-01-11 22:48:52,464 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:48:52,466 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:48:52,466 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:48:53,334 | INFO | src.utils | Epoch 2 train loss: 7.885414, examples=97401, time=0.9s
+2026-01-11 22:48:53,488 | INFO | src.utils | Epoch 2 val metrics: {"loss": 5.2383131980896, "rmse": 2.288736170648413, "precision@k": 0.003817603393425239, "recall@k": 0.03817603393425239, "ndcg@k": 0.017991009340194944}
+2026-01-11 22:48:53,490 | INFO | src.utils | New best val RMSE 2.288736 at epoch 2. Saving best model.
+2026-01-11 22:48:53,497 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_2.pth
+2026-01-11 22:48:53,499 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:48:53,501 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:48:53,501 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:48:54,438 | INFO | src.utils | Epoch 3 train loss: 2.154299, examples=97401, time=0.9s
+2026-01-11 22:48:54,605 | INFO | src.utils | Epoch 3 val metrics: {"loss": 2.1447393894195557, "rmse": 1.4644928861476474, "precision@k": 0.0031813361611876994, "recall@k": 0.031813361611876985, "ndcg@k": 0.01517125633207741}
+2026-01-11 22:48:54,605 | INFO | src.utils | New best val RMSE 1.464493 at epoch 3. Saving best model.
+2026-01-11 22:48:54,607 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_3.pth
+2026-01-11 22:48:54,609 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:48:54,610 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:48:54,610 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:48:55,804 | INFO | src.utils | Epoch 4 train loss: 1.135198, examples=97401, time=1.2s
+2026-01-11 22:48:55,998 | INFO | src.utils | Epoch 4 val metrics: {"loss": 1.464943289756775, "rmse": 1.210348398103588, "precision@k": 0.0033934252386002123, "recall@k": 0.033934252386002124, "ndcg@k": 0.013792534408467054}
+2026-01-11 22:48:55,998 | INFO | src.utils | New best val RMSE 1.210348 at epoch 4. Saving best model.
+2026-01-11 22:48:56,001 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_4.pth
+2026-01-11 22:48:56,005 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:48:56,005 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:48:56,005 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:48:57,107 | INFO | src.utils | Epoch 5 train loss: 0.961876, examples=97401, time=1.1s
+2026-01-11 22:48:57,255 | INFO | src.utils | Epoch 5 val metrics: {"loss": 1.2217198610305786, "rmse": 1.1053143111065875, "precision@k": 0.0028632025450689292, "recall@k": 0.02863202545068929, "ndcg@k": 0.01283065540849641}
+2026-01-11 22:48:57,255 | INFO | src.utils | New best val RMSE 1.105314 at epoch 5. Saving best model.
+2026-01-11 22:48:57,258 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_5.pth
+2026-01-11 22:48:57,266 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:48:57,267 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:48:57,267 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:48:57,279 | INFO | src.utils | Saving checkpoint at epoch 5
+2026-01-11 22:48:57,282 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_5.pth
+2026-01-11 22:48:57,286 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:48:57,287 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:48:57,287 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:48:58,104 | INFO | src.utils | Epoch 6 train loss: 0.900813, examples=97401, time=0.8s
+2026-01-11 22:48:58,322 | INFO | src.utils | Epoch 6 val metrics: {"loss": 1.1138958930969238, "rmse": 1.0554126766774587, "precision@k": 0.0032873806998939556, "recall@k": 0.032873806998939555, "ndcg@k": 0.014827981769737169}
+2026-01-11 22:48:58,322 | INFO | src.utils | New best val RMSE 1.055413 at epoch 6. Saving best model.
+2026-01-11 22:48:58,325 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_6.pth
+2026-01-11 22:48:58,327 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:48:58,328 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:48:58,328 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:48:59,552 | INFO | src.utils | Epoch 7 train loss: 0.873560, examples=97401, time=1.2s
+2026-01-11 22:48:59,723 | INFO | src.utils | Epoch 7 val metrics: {"loss": 1.0591518878936768, "rmse": 1.0291510648250632, "precision@k": 0.0030752916224814422, "recall@k": 0.030752916224814422, "ndcg@k": 0.01386557924601208}
+2026-01-11 22:48:59,723 | INFO | src.utils | New best val RMSE 1.029151 at epoch 7. Saving best model.
+2026-01-11 22:48:59,727 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_7.pth
+2026-01-11 22:48:59,732 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:48:59,732 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:48:59,732 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:49:00,670 | INFO | src.utils | Epoch 8 train loss: 0.859406, examples=97401, time=0.9s
+2026-01-11 22:49:00,832 | INFO | src.utils | Epoch 8 val metrics: {"loss": 1.0319842100143433, "rmse": 1.01586620391903, "precision@k": 0.0029692470837751855, "recall@k": 0.029692470837751856, "ndcg@k": 0.013698070431741068}
+2026-01-11 22:49:00,832 | INFO | src.utils | New best val RMSE 1.015866 at epoch 8. Saving best model.
+2026-01-11 22:49:00,835 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_8.pth
+2026-01-11 22:49:00,839 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:49:00,840 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:49:00,841 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:49:01,646 | INFO | src.utils | Epoch 9 train loss: 0.851154, examples=97401, time=0.8s
+2026-01-11 22:49:01,794 | INFO | src.utils | Epoch 9 val metrics: {"loss": 1.0215556621551514, "rmse": 1.0107203972631231, "precision@k": 0.0028632025450689292, "recall@k": 0.02863202545068929, "ndcg@k": 0.013268311404458734}
+2026-01-11 22:49:01,794 | INFO | src.utils | New best val RMSE 1.010720 at epoch 9. Saving best model.
+2026-01-11 22:49:01,798 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_9.pth
+2026-01-11 22:49:01,803 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:49:01,804 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:49:01,804 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:49:02,667 | INFO | src.utils | Epoch 10 train loss: 0.845262, examples=97401, time=0.9s
+2026-01-11 22:49:02,813 | INFO | src.utils | Epoch 10 val metrics: {"loss": 1.008853793144226, "rmse": 1.0044171195791396, "precision@k": 0.002651113467656416, "recall@k": 0.026511134676564158, "ndcg@k": 0.012505454409405656}
+2026-01-11 22:49:02,813 | INFO | src.utils | New best val RMSE 1.004417 at epoch 10. Saving best model.
+2026-01-11 22:49:02,816 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_10.pth
+2026-01-11 22:49:02,821 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:49:02,822 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:49:02,822 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:49:02,830 | INFO | src.utils | Saving checkpoint at epoch 10
+2026-01-11 22:49:02,833 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_10.pth
+2026-01-11 22:49:02,836 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:49:02,836 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:49:02,836 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:49:03,779 | INFO | src.utils | Epoch 11 train loss: 0.833957, examples=97401, time=0.9s
+2026-01-11 22:49:03,926 | INFO | src.utils | Epoch 11 val metrics: {"loss": 1.0076426267623901, "rmse": 1.0038140905318809, "precision@k": 0.002969247083775186, "recall@k": 0.029692470837751856, "ndcg@k": 0.01338890362811036}
+2026-01-11 22:49:03,926 | INFO | src.utils | New best val RMSE 1.003814 at epoch 11. Saving best model.
+2026-01-11 22:49:03,929 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_11.pth
+2026-01-11 22:49:03,930 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:49:03,931 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:49:03,931 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:49:04,749 | INFO | src.utils | Epoch 12 train loss: 0.831208, examples=97401, time=0.8s
+2026-01-11 22:49:04,890 | INFO | src.utils | Epoch 12 val metrics: {"loss": 1.0089164972305298, "rmse": 1.0044483079142883, "precision@k": 0.0028632025450689292, "recall@k": 0.02863202545068929, "ndcg@k": 0.013438474088679597}
+2026-01-11 22:49:05,722 | INFO | src.utils | Epoch 13 train loss: 0.828688, examples=97401, time=0.8s
+2026-01-11 22:49:05,868 | INFO | src.utils | Epoch 13 val metrics: {"loss": 1.0042572021484375, "rmse": 1.002126326516932, "precision@k": 0.002969247083775186, "recall@k": 0.029692470837751856, "ndcg@k": 0.013396457153129916}
+2026-01-11 22:49:05,868 | INFO | src.utils | New best val RMSE 1.002126 at epoch 13. Saving best model.
+2026-01-11 22:49:05,871 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_13.pth
+2026-01-11 22:49:05,875 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:49:05,876 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:49:05,876 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:49:06,685 | INFO | src.utils | Epoch 14 train loss: 0.826525, examples=97401, time=0.8s
+2026-01-11 22:49:06,832 | INFO | src.utils | Epoch 14 val metrics: {"loss": 1.0008103847503662, "rmse": 1.0004051556603146, "precision@k": 0.002757158006362673, "recall@k": 0.027571580063626724, "ndcg@k": 0.012782427447916913}
+2026-01-11 22:49:06,832 | INFO | src.utils | New best val RMSE 1.000405 at epoch 14. Saving best model.
+2026-01-11 22:49:06,835 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_14.pth
+2026-01-11 22:49:06,836 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:49:06,837 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:49:06,837 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:49:07,747 | INFO | src.utils | Epoch 15 train loss: 0.824391, examples=97401, time=0.9s
+2026-01-11 22:49:07,891 | INFO | src.utils | Epoch 15 val metrics: {"loss": 0.9998170733451843, "rmse": 0.99990857757558, "precision@k": 0.0028632025450689292, "recall@k": 0.02863202545068929, "ndcg@k": 0.01341137512032559}
+2026-01-11 22:49:07,892 | INFO | src.utils | New best val RMSE 0.999909 at epoch 15. Saving best model.
+2026-01-11 22:49:07,894 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_15.pth
+2026-01-11 22:49:07,899 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:49:07,901 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:49:07,901 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:49:07,908 | INFO | src.utils | Saving checkpoint at epoch 15
+2026-01-11 22:49:07,910 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_15.pth
+2026-01-11 22:49:07,914 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:49:07,914 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:49:07,914 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:49:08,746 | INFO | src.utils | Epoch 16 train loss: 0.821847, examples=97401, time=0.8s
+2026-01-11 22:49:08,893 | INFO | src.utils | Epoch 16 val metrics: {"loss": 0.9977123737335205, "rmse": 0.9988555559707267, "precision@k": 0.002439024390243903, "recall@k": 0.024390243902439025, "ndcg@k": 0.012154997284838336}
+2026-01-11 22:49:08,893 | INFO | src.utils | New best val RMSE 0.998856 at epoch 16. Saving best model.
+2026-01-11 22:49:08,896 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_16.pth
+2026-01-11 22:49:08,898 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:49:08,898 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:49:08,898 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:49:09,696 | INFO | src.utils | Epoch 17 train loss: 0.819726, examples=97401, time=0.8s
+2026-01-11 22:49:09,840 | INFO | src.utils | Epoch 17 val metrics: {"loss": 0.9991518259048462, "rmse": 0.9995758232232953, "precision@k": 0.0025450689289501596, "recall@k": 0.02545068928950159, "ndcg@k": 0.012363351740830069}
+2026-01-11 22:49:10,667 | INFO | src.utils | Epoch 18 train loss: 0.817373, examples=97401, time=0.8s
+2026-01-11 22:49:10,811 | INFO | src.utils | Epoch 18 val metrics: {"loss": 0.9967241883277893, "rmse": 0.9983607434048545, "precision@k": 0.0022269353128313895, "recall@k": 0.022269353128313893, "ndcg@k": 0.01089509509962089}
+2026-01-11 22:49:10,811 | INFO | src.utils | New best val RMSE 0.998361 at epoch 18. Saving best model.
+2026-01-11 22:49:10,813 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_18.pth
+2026-01-11 22:49:10,819 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:49:10,820 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:49:10,820 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:49:11,679 | INFO | src.utils | Epoch 19 train loss: 0.814897, examples=97401, time=0.9s
+2026-01-11 22:49:11,825 | INFO | src.utils | Epoch 19 val metrics: {"loss": 0.9937300086021423, "rmse": 0.9968600443239133, "precision@k": 0.002014846235418876, "recall@k": 0.02014846235418876, "ndcg@k": 0.010296235273874446}
+2026-01-11 22:49:11,825 | INFO | src.utils | New best val RMSE 0.996860 at epoch 19. Saving best model.
+2026-01-11 22:49:11,828 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_19.pth
+2026-01-11 22:49:11,830 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:49:11,830 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:49:11,830 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:49:12,596 | INFO | src.utils | Epoch 20 train loss: 0.812477, examples=97401, time=0.8s
+2026-01-11 22:49:12,757 | INFO | src.utils | Epoch 20 val metrics: {"loss": 0.9931842684745789, "rmse": 0.9965863244941684, "precision@k": 0.002332979851537646, "recall@k": 0.02332979851537646, "ndcg@k": 0.010919477831110407}
+2026-01-11 22:49:12,758 | INFO | src.utils | New best val RMSE 0.996586 at epoch 20. Saving best model.
+2026-01-11 22:49:12,760 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_20.pth
+2026-01-11 22:49:12,764 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:49:12,765 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:49:12,765 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:49:12,773 | INFO | src.utils | Saving checkpoint at epoch 20
+2026-01-11 22:49:12,776 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_20.pth
+2026-01-11 22:49:12,780 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:49:12,781 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:49:12,781 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:49:12,927 | INFO | src.utils | Test metrics: {"loss": 1.0807641744613647, "rmse": 1.0395981400818823, "precision@k": 0.0020148462354188756, "recall@k": 0.02014846235418876, "ndcg@k": 0.009366333375316036}
+2026-01-11 22:49:12,927 | INFO | src.utils | Saving final model and metrics...
+2026-01-11 22:49:12,930 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_20.pth
+2026-01-11 22:49:12,934 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 22:49:12,936 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 22:49:12,936 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 22:49:12,937 | INFO | src.utils | Saved metrics to artifacts/model/metrics.json
+2026-01-11 22:49:12,940 | INFO | src.utils | Saved used config to artifacts/model/config_used.yaml
+2026-01-11 22:49:13,082 | INFO | src.utils | Training finished.
+2026-01-11 22:49:13,083 | INFO | src.utils | Best val RMSE 0.996586 at epoch 20
+2026-01-11 23:01:57,740 | INFO | src.utils | Loaded config from configs/train.yaml
+2026-01-11 23:01:58,098 | INFO | __name__ | setup plugin alembic.autogenerate.schemas
+2026-01-11 23:01:58,098 | INFO | __name__ | setup plugin alembic.autogenerate.tables
+2026-01-11 23:01:58,098 | INFO | __name__ | setup plugin alembic.autogenerate.types
+2026-01-11 23:01:58,098 | INFO | __name__ | setup plugin alembic.autogenerate.constraints
+2026-01-11 23:01:58,098 | INFO | __name__ | setup plugin alembic.autogenerate.defaults
+2026-01-11 23:01:58,098 | INFO | __name__ | setup plugin alembic.autogenerate.comments
+2026-01-11 23:01:58,657 | INFO | src.utils | Set python and numpy seed to 42
+2026-01-11 23:01:58,661 | INFO | src.utils | Configured torch.backends.cudnn for deterministic behavior (may be slower).
+2026-01-11 23:01:58,686 | INFO | src.utils | Inferred n_users=943, n_items=1349 from processed files.
+2026-01-11 23:01:58,687 | INFO | src.utils | Preparing dataloaders with model_type=mf, batch_size=1024, num_workers=0
+2026-01-11 23:01:58,706 | INFO | src.dataset | Loaded interactions: train=97401 val=943 test=943
+2026-01-11 23:01:58,707 | INFO | src.utils | Building model from config. model_cfg keys: ['type', 'embedding_dim', 'ncf_hidden', 'dropout', 'clamp_preds', 'min_rating', 'max_rating', 'model_init_args']
+2026-01-11 23:01:58,721 | WARNING | src.utils | CUDA requested in config but not available. Falling back to CPU.
+2026-01-11 23:01:58,723 | INFO | src.utils | Model built and moved to device cpu
+2026-01-11 23:02:00,034 | INFO | src.utils | Built optimizer adam lr=0.001 betas=(0.9, 0.999) eps=1e-08 weight_decay=0.0
+2026-01-11 23:02:00,034 | INFO | src.utils | Starting training for 20 epochs. use_amp=True
+2026-01-11 23:02:00,968 | INFO | src.utils | Epoch 1 train loss: 13.100875, examples=97401, time=0.8s
+2026-01-11 23:02:01,222 | INFO | src.utils | Epoch 1 val metrics: {"loss": 11.660715103149414, "rmse": 3.414779036889794, "precision@k": 0.0032873806998939556, "recall@k": 0.032873806998939555, "ndcg@k": 0.016958897501901788}
+2026-01-11 23:02:01,222 | INFO | src.utils | New best val RMSE 3.414779 at epoch 1. Saving best model.
+2026-01-11 23:02:01,232 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_1.pth
+2026-01-11 23:02:01,237 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:01,238 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:01,238 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:02,084 | INFO | src.utils | Epoch 2 train loss: 7.885414, examples=97401, time=0.8s
+2026-01-11 23:02:02,229 | INFO | src.utils | Epoch 2 val metrics: {"loss": 5.2383131980896, "rmse": 2.288736170648413, "precision@k": 0.003817603393425239, "recall@k": 0.03817603393425239, "ndcg@k": 0.017991009340194944}
+2026-01-11 23:02:02,230 | INFO | src.utils | New best val RMSE 2.288736 at epoch 2. Saving best model.
+2026-01-11 23:02:02,233 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_2.pth
+2026-01-11 23:02:02,236 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:02,237 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:02,237 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:03,022 | INFO | src.utils | Epoch 3 train loss: 2.154299, examples=97401, time=0.8s
+2026-01-11 23:02:03,168 | INFO | src.utils | Epoch 3 val metrics: {"loss": 2.1447393894195557, "rmse": 1.4644928861476474, "precision@k": 0.0031813361611876994, "recall@k": 0.031813361611876985, "ndcg@k": 0.01517125633207741}
+2026-01-11 23:02:03,168 | INFO | src.utils | New best val RMSE 1.464493 at epoch 3. Saving best model.
+2026-01-11 23:02:03,171 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_3.pth
+2026-01-11 23:02:03,174 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:03,175 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:03,175 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:04,085 | INFO | src.utils | Epoch 4 train loss: 1.135198, examples=97401, time=0.9s
+2026-01-11 23:02:04,229 | INFO | src.utils | Epoch 4 val metrics: {"loss": 1.464943289756775, "rmse": 1.210348398103588, "precision@k": 0.0033934252386002123, "recall@k": 0.033934252386002124, "ndcg@k": 0.013792534408467054}
+2026-01-11 23:02:04,229 | INFO | src.utils | New best val RMSE 1.210348 at epoch 4. Saving best model.
+2026-01-11 23:02:04,232 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_4.pth
+2026-01-11 23:02:04,235 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:04,236 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:04,236 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:05,158 | INFO | src.utils | Epoch 5 train loss: 0.961876, examples=97401, time=0.9s
+2026-01-11 23:02:05,299 | INFO | src.utils | Epoch 5 val metrics: {"loss": 1.2217198610305786, "rmse": 1.1053143111065875, "precision@k": 0.0028632025450689292, "recall@k": 0.02863202545068929, "ndcg@k": 0.01283065540849641}
+2026-01-11 23:02:05,300 | INFO | src.utils | New best val RMSE 1.105314 at epoch 5. Saving best model.
+2026-01-11 23:02:05,303 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_5.pth
+2026-01-11 23:02:05,307 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:05,311 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:05,311 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:05,320 | INFO | src.utils | Saving checkpoint at epoch 5
+2026-01-11 23:02:05,324 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_5.pth
+2026-01-11 23:02:05,325 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:05,328 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:05,328 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:06,097 | INFO | src.utils | Epoch 6 train loss: 0.900813, examples=97401, time=0.8s
+2026-01-11 23:02:06,243 | INFO | src.utils | Epoch 6 val metrics: {"loss": 1.1138958930969238, "rmse": 1.0554126766774587, "precision@k": 0.0032873806998939556, "recall@k": 0.032873806998939555, "ndcg@k": 0.014827981769737169}
+2026-01-11 23:02:06,243 | INFO | src.utils | New best val RMSE 1.055413 at epoch 6. Saving best model.
+2026-01-11 23:02:06,246 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_6.pth
+2026-01-11 23:02:06,248 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:06,249 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:06,249 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:07,104 | INFO | src.utils | Epoch 7 train loss: 0.873560, examples=97401, time=0.8s
+2026-01-11 23:02:07,250 | INFO | src.utils | Epoch 7 val metrics: {"loss": 1.0591518878936768, "rmse": 1.0291510648250632, "precision@k": 0.0030752916224814422, "recall@k": 0.030752916224814422, "ndcg@k": 0.01386557924601208}
+2026-01-11 23:02:07,251 | INFO | src.utils | New best val RMSE 1.029151 at epoch 7. Saving best model.
+2026-01-11 23:02:07,254 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_7.pth
+2026-01-11 23:02:07,258 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:07,260 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:07,260 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:08,102 | INFO | src.utils | Epoch 8 train loss: 0.859406, examples=97401, time=0.8s
+2026-01-11 23:02:08,253 | INFO | src.utils | Epoch 8 val metrics: {"loss": 1.0319842100143433, "rmse": 1.01586620391903, "precision@k": 0.0029692470837751855, "recall@k": 0.029692470837751856, "ndcg@k": 0.013698070431741068}
+2026-01-11 23:02:08,253 | INFO | src.utils | New best val RMSE 1.015866 at epoch 8. Saving best model.
+2026-01-11 23:02:08,259 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_8.pth
+2026-01-11 23:02:08,262 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:08,263 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:08,263 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:09,098 | INFO | src.utils | Epoch 9 train loss: 0.851154, examples=97401, time=0.8s
+2026-01-11 23:02:09,241 | INFO | src.utils | Epoch 9 val metrics: {"loss": 1.0215556621551514, "rmse": 1.0107203972631231, "precision@k": 0.0028632025450689292, "recall@k": 0.02863202545068929, "ndcg@k": 0.013268311404458734}
+2026-01-11 23:02:09,241 | INFO | src.utils | New best val RMSE 1.010720 at epoch 9. Saving best model.
+2026-01-11 23:02:09,244 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_9.pth
+2026-01-11 23:02:09,248 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:09,251 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:09,251 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:10,105 | INFO | src.utils | Epoch 10 train loss: 0.845262, examples=97401, time=0.8s
+2026-01-11 23:02:10,297 | INFO | src.utils | Epoch 10 val metrics: {"loss": 1.008853793144226, "rmse": 1.0044171195791396, "precision@k": 0.002651113467656416, "recall@k": 0.026511134676564158, "ndcg@k": 0.012505454409405656}
+2026-01-11 23:02:10,297 | INFO | src.utils | New best val RMSE 1.004417 at epoch 10. Saving best model.
+2026-01-11 23:02:10,300 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_10.pth
+2026-01-11 23:02:10,304 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:10,306 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:10,306 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:10,313 | INFO | src.utils | Saving checkpoint at epoch 10
+2026-01-11 23:02:10,317 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_10.pth
+2026-01-11 23:02:10,319 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:10,320 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:10,320 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:11,187 | INFO | src.utils | Epoch 11 train loss: 0.833957, examples=97401, time=0.9s
+2026-01-11 23:02:11,326 | INFO | src.utils | Epoch 11 val metrics: {"loss": 1.0076426267623901, "rmse": 1.0038140905318809, "precision@k": 0.002969247083775186, "recall@k": 0.029692470837751856, "ndcg@k": 0.01338890362811036}
+2026-01-11 23:02:11,326 | INFO | src.utils | New best val RMSE 1.003814 at epoch 11. Saving best model.
+2026-01-11 23:02:11,330 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_11.pth
+2026-01-11 23:02:11,334 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:11,335 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:11,335 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:12,252 | INFO | src.utils | Epoch 12 train loss: 0.831208, examples=97401, time=0.9s
+2026-01-11 23:02:12,419 | INFO | src.utils | Epoch 12 val metrics: {"loss": 1.0089164972305298, "rmse": 1.0044483079142883, "precision@k": 0.0028632025450689292, "recall@k": 0.02863202545068929, "ndcg@k": 0.013438474088679597}
+2026-01-11 23:02:13,335 | INFO | src.utils | Epoch 13 train loss: 0.828688, examples=97401, time=0.9s
+2026-01-11 23:02:13,492 | INFO | src.utils | Epoch 13 val metrics: {"loss": 1.0042572021484375, "rmse": 1.002126326516932, "precision@k": 0.002969247083775186, "recall@k": 0.029692470837751856, "ndcg@k": 0.013396457153129916}
+2026-01-11 23:02:13,492 | INFO | src.utils | New best val RMSE 1.002126 at epoch 13. Saving best model.
+2026-01-11 23:02:13,495 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_13.pth
+2026-01-11 23:02:13,497 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:13,498 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:13,498 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:14,354 | INFO | src.utils | Epoch 14 train loss: 0.826525, examples=97401, time=0.8s
+2026-01-11 23:02:14,503 | INFO | src.utils | Epoch 14 val metrics: {"loss": 1.0008103847503662, "rmse": 1.0004051556603146, "precision@k": 0.002757158006362673, "recall@k": 0.027571580063626724, "ndcg@k": 0.012782427447916913}
+2026-01-11 23:02:14,503 | INFO | src.utils | New best val RMSE 1.000405 at epoch 14. Saving best model.
+2026-01-11 23:02:14,506 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_14.pth
+2026-01-11 23:02:14,509 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:14,509 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:14,509 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:15,537 | INFO | src.utils | Epoch 15 train loss: 0.824391, examples=97401, time=1.0s
+2026-01-11 23:02:15,701 | INFO | src.utils | Epoch 15 val metrics: {"loss": 0.9998170733451843, "rmse": 0.99990857757558, "precision@k": 0.0028632025450689292, "recall@k": 0.02863202545068929, "ndcg@k": 0.01341137512032559}
+2026-01-11 23:02:15,701 | INFO | src.utils | New best val RMSE 0.999909 at epoch 15. Saving best model.
+2026-01-11 23:02:15,705 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_15.pth
+2026-01-11 23:02:15,706 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:15,707 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:15,707 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:15,721 | INFO | src.utils | Saving checkpoint at epoch 15
+2026-01-11 23:02:15,728 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_15.pth
+2026-01-11 23:02:15,730 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:15,731 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:15,731 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:16,922 | INFO | src.utils | Epoch 16 train loss: 0.821847, examples=97401, time=1.2s
+2026-01-11 23:02:17,076 | INFO | src.utils | Epoch 16 val metrics: {"loss": 0.9977123737335205, "rmse": 0.9988555559707267, "precision@k": 0.002439024390243903, "recall@k": 0.024390243902439025, "ndcg@k": 0.012154997284838336}
+2026-01-11 23:02:17,076 | INFO | src.utils | New best val RMSE 0.998856 at epoch 16. Saving best model.
+2026-01-11 23:02:17,079 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_16.pth
+2026-01-11 23:02:17,083 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:17,084 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:17,084 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:17,910 | INFO | src.utils | Epoch 17 train loss: 0.819726, examples=97401, time=0.8s
+2026-01-11 23:02:18,055 | INFO | src.utils | Epoch 17 val metrics: {"loss": 0.9991518259048462, "rmse": 0.9995758232232953, "precision@k": 0.0025450689289501596, "recall@k": 0.02545068928950159, "ndcg@k": 0.012363351740830069}
+2026-01-11 23:02:19,255 | INFO | src.utils | Epoch 18 train loss: 0.817373, examples=97401, time=1.2s
+2026-01-11 23:02:19,409 | INFO | src.utils | Epoch 18 val metrics: {"loss": 0.9967241883277893, "rmse": 0.9983607434048545, "precision@k": 0.0022269353128313895, "recall@k": 0.022269353128313893, "ndcg@k": 0.01089509509962089}
+2026-01-11 23:02:19,409 | INFO | src.utils | New best val RMSE 0.998361 at epoch 18. Saving best model.
+2026-01-11 23:02:19,412 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_18.pth
+2026-01-11 23:02:19,415 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:19,416 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:19,416 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:20,272 | INFO | src.utils | Epoch 19 train loss: 0.814897, examples=97401, time=0.8s
+2026-01-11 23:02:20,471 | INFO | src.utils | Epoch 19 val metrics: {"loss": 0.9937300086021423, "rmse": 0.9968600443239133, "precision@k": 0.002014846235418876, "recall@k": 0.02014846235418876, "ndcg@k": 0.010296235273874446}
+2026-01-11 23:02:20,472 | INFO | src.utils | New best val RMSE 0.996860 at epoch 19. Saving best model.
+2026-01-11 23:02:20,475 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_19.pth
+2026-01-11 23:02:20,478 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:20,480 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:20,481 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:21,265 | INFO | src.utils | Epoch 20 train loss: 0.812477, examples=97401, time=0.8s
+2026-01-11 23:02:21,414 | INFO | src.utils | Epoch 20 val metrics: {"loss": 0.9931842684745789, "rmse": 0.9965863244941684, "precision@k": 0.002332979851537646, "recall@k": 0.02332979851537646, "ndcg@k": 0.010919477831110407}
+2026-01-11 23:02:21,414 | INFO | src.utils | New best val RMSE 0.996586 at epoch 20. Saving best model.
+2026-01-11 23:02:21,417 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_20.pth
+2026-01-11 23:02:21,421 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:21,423 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:21,423 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:21,430 | INFO | src.utils | Saving checkpoint at epoch 20
+2026-01-11 23:02:21,434 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_20.pth
+2026-01-11 23:02:21,435 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:21,437 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:21,437 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:21,582 | INFO | src.utils | Test metrics: {"loss": 1.0807641744613647, "rmse": 1.0395981400818823, "precision@k": 0.0020148462354188756, "recall@k": 0.02014846235418876, "ndcg@k": 0.009366333375316036}
+2026-01-11 23:02:21,582 | INFO | src.utils | Saving final model and metrics...
+2026-01-11 23:02:21,586 | INFO | src.engine | Saved checkpoint metadata to artifacts/model/checkpoint_epoch_20.pth
+2026-01-11 23:02:21,590 | INFO | src.model | Saved model state_dict to artifacts/model/pytorch_model.bin
+2026-01-11 23:02:21,592 | INFO | src.model | Saved config to artifacts/model/config.json
+2026-01-11 23:02:21,592 | INFO | src.engine | Saved model weights/config via save_pretrained to artifacts/model
+2026-01-11 23:02:21,592 | INFO | src.utils | Saved metrics to artifacts/model/metrics.json
+2026-01-11 23:02:21,595 | INFO | src.utils | Saved used config to artifacts/model/config_used.yaml
+2026-01-11 23:02:21,755 | INFO | src.utils | Training finished.
+2026-01-11 23:02:21,756 | INFO | src.utils | Best val RMSE 0.996586 at epoch 20
+2026-01-11 23:02:24,775 | INFO | __main__ | Using config: configs/train.yaml
+2026-01-11 23:02:24,775 | INFO | __main__ | Model dir: artifacts/model
+2026-01-11 23:02:24,775 | INFO | src.utils | Set python and numpy seed to 42
+2026-01-11 23:02:24,780 | INFO | src.utils | Configured torch.backends.cudnn for deterministic behavior (may be slower).
+2026-01-11 23:02:24,780 | WARNING | __main__ | CUDA requested but not available. Falling back to CPU.
+2026-01-11 23:02:24,780 | INFO | __main__ | Preparing dataloaders with model_type=mf, batch_size=1024, num_workers=0
+2026-01-11 23:02:24,806 | INFO | src.dataset | Loaded interactions: train=97401 val=943 test=943
+2026-01-11 23:02:24,807 | WARNING | src.dataset | n_users/n_items not provided. Inferred n_users=943, n_items=1349
+2026-01-11 23:02:24,809 | INFO | __main__ | Building model from saved config keys: ['type', 'embedding_dim', 'ncf_hidden', 'dropout', 'clamp_preds', 'min_rating', 'max_rating', 'model_init_args']
+2026-01-11 23:02:24,820 | INFO | __main__ | Loaded model from artifacts/model and moved to device cpu
+2026-01-11 23:02:24,820 | INFO | __main__ | Starting evaluation. compute_full_ranking=True, topk=10, n_items=1349
+2026-01-11 23:02:24,990 | INFO | __main__ | Saved evaluation metrics to artifacts/metrics/metrics_eval.json
+2026-01-11 23:02:24,990 | INFO | __main__ | Evaluation results: {
+  "loss": 1.0807641744613647,
+  "rmse": 1.0395981400818823,
+  "precision@k": 0.0020148462354188756,
+  "recall@k": 0.02014846235418876,
+  "ndcg@k": 0.009366333375316036
+}
+2026-01-11 23:02:25,029 | INFO | __main__ | Git SHA: 6fe080772b824a07a237cef22e4692f7d72ee913
+2026-01-11 23:02:25,029 | INFO | __main__ | Found dvc.lock in repo root (pipeline hash information available).
+2026-01-11 23:02:25,029 | INFO | __main__ | Evaluation finished.

@@ -8,12 +8,14 @@ from typing import Any, Dict, Optional
 
 import torch
 from torch import nn
+import mlflow
 
 from src import dataset as dataset_mod
 from src import engine
 from src import model as model_mod
 from src import preprocess as preprocess_mod
 from src import utils
+from src import mlflow_utils
 
 logger = utils.logger
 
@@ -280,6 +282,17 @@ def main():
     utils.setup_basic_logger(level=log_level, log_file=log_file)
     logger.info(f"Loaded config from {args.config}")
 
+    # expose config path in cfg for logging
+    cfg["_config_path"] = args.config
+
+    # start mlflow run
+    mlflow_utils.mlflow_start_run_from_cfg(cfg)
+    # optionally enable autolog for certain libs (pytorch autolog exists)
+    try:
+        mlflow.pytorch.autolog()
+    except Exception:
+        logger.warning("Failed to enable pytorch autologging")
+
     # set seed
     seed = int(cfg.get("seed", 42))
     utils.set_seed(seed)
@@ -509,6 +522,9 @@ def main():
                         model, optimizer, epoch, save_dir, config=cfg
                     )
 
+        # log epoch metrics to mlflow
+        mlflow_utils.mlflow_log_epoch_metrics(epoch, {"train_loss": train_res["loss"], **val_metrics})
+
         # optionally checkpoint every N epochs
         if (
             (checkpoint_every > 0)
@@ -553,6 +569,13 @@ def main():
         config_used_path = os.path.join(save_dir, "config_used.yaml")
         utils.save_yaml(cfg, config_used_path)
         logger.info(f"Saved used config to {config_used_path}")
+
+    # ensure metrics json path (we already save metrics in code to artifacts/model/metrics.json)
+    metrics_path = os.path.join(save_dir, "metrics.json")
+    dvc_lock = os.path.join(os.getcwd(), "dvc.lock")
+    mlflow_utils.mlflow_log_artifacts_and_meta(model_dir=save_dir, metrics_path=metrics_path, dvc_lock_path=dvc_lock)
+    mlflow_utils.mlflow_end_run()
+
 
     logger.info("Training finished.")
     if best_epoch > 0:
