@@ -490,3 +490,24 @@
 2025-11-05 20:42:07,426 | INFO | src.utils | Saved used config to artifacts/model\config_used.yaml
 2025-11-05 20:42:07,427 | INFO | src.utils | Training finished.
 2025-11-05 20:42:07,427 | INFO | src.utils | Best val RMSE 0.996586 at epoch 20
+2026-01-11 15:33:00,513 | INFO | __main__ | Using config: configs/train.yaml
+2026-01-11 15:33:00,513 | INFO | __main__ | Model dir: artifacts/model
+2026-01-11 15:33:00,513 | INFO | src.utils | Set python and numpy seed to 42
+2026-01-11 15:33:00,597 | INFO | src.utils | Configured torch.backends.cudnn for deterministic behavior (may be slower).
+2026-01-11 15:33:00,597 | INFO | __main__ | Preparing dataloaders with model_type=mf, batch_size=1024, num_workers=0
+2026-01-11 15:33:00,700 | INFO | src.dataset | Loaded interactions: train=97401 val=943 test=943
+2026-01-11 15:33:00,703 | WARNING | src.dataset | n_users/n_items not provided. Inferred n_users=943, n_items=1349
+2026-01-11 15:33:00,709 | INFO | __main__ | Building model from saved config keys: ['type', 'embedding_dim', 'ncf_hidden', 'dropout', 'clamp_preds', 'min_rating', 'max_rating', 'model_init_args']
+2026-01-11 15:33:00,924 | INFO | __main__ | Loaded model from artifacts/model and moved to device cuda
+2026-01-11 15:33:00,924 | INFO | __main__ | Starting evaluation. compute_full_ranking=True, topk=10, n_items=1349
+2026-01-11 15:33:01,812 | INFO | __main__ | Saved evaluation metrics to artifacts/model\metrics_eval.json
+2026-01-11 15:33:01,812 | INFO | __main__ | Evaluation results: {
+  "loss": 1.0807644128799438,
+  "rmse": 1.0395981766296305,
+  "precision@k": 0.0020148462354188756,
+  "recall@k": 0.02014846235418876,
+  "ndcg@k": 0.009366333375316036
+}
+2026-01-11 15:33:01,874 | INFO | __main__ | Git SHA: bed1bde03eec00e7d72734adaa83c1415dee19af
+2026-01-11 15:33:01,875 | INFO | __main__ | dvc.lock not found in repo root.
+2026-01-11 15:33:01,875 | INFO | __main__ | Evaluation finished.
