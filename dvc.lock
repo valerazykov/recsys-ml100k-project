@@ -1,0 +1,76 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python -m src.preprocess --config configs/train.yaml --write-config
+    deps:
+    - path: configs/train.yaml
+      hash: md5
+      md5: 1546efd7e77fbbac8e342fe708412851
+      size: 2446
+    - path: data/ml-100k/
+      hash: md5
+      md5: 33e3b98f41ab1289116f74de90b95a24.dir
+      size: 16100896
+      nfiles: 23
+    - path: src/preprocess.py
+      hash: md5
+      md5: 8e405fd5b3d9ba65c81aeff3748ea33b
+      size: 12236
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: 9a644bc87f60a8d5fe012e92e3b45f97.dir
+      size: 2767578
+      nfiles: 5
+  train:
+    cmd: python -m src.train --config configs/train.yaml
+    deps:
+    - path: configs/train.yaml
+      hash: md5
+      md5: 1546efd7e77fbbac8e342fe708412851
+      size: 2446
+    - path: data/processed/
+      hash: md5
+      md5: 9a644bc87f60a8d5fe012e92e3b45f97.dir
+      size: 2767578
+      nfiles: 5
+    - path: src/engine.py
+      hash: md5
+      md5: 2a364395cf1d53bc47132b6ea06b498d
+      size: 9029
+    - path: src/model.py
+      hash: md5
+      md5: 9fad59b186ce86cc2a4e1e65f072078a
+      size: 13082
+    - path: src/train.py
+      hash: md5
+      md5: 47b3c0853c843f691dc6a08f7dcc18f6
+      size: 20288
+    outs:
+    - path: artifacts/model
+      hash: md5
+      md5: f54d40515a6000c229092cf40dd8317f.dir
+      size: 22147389
+      nfiles: 22
+  evaluate:
+    cmd: python -m src.evaluate --config configs/train.yaml --model-dir 
+      artifacts/model
+    deps:
+    - path: artifacts/model
+      hash: md5
+      md5: f54d40515a6000c229092cf40dd8317f.dir
+      size: 22147389
+      nfiles: 22
+    - path: configs/train.yaml
+      hash: md5
+      md5: 1546efd7e77fbbac8e342fe708412851
+      size: 2446
+    - path: src/evaluate.py
+      hash: md5
+      md5: 660192b76845667af61fae60c73f59fa
+      size: 7813
+    outs:
+    - path: artifacts/metrics/metrics_eval.json
+      hash: md5
+      md5: 42e803557167c5c8acf0db198e634bcc
+      size: 171
