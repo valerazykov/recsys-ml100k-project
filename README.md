@@ -158,7 +158,12 @@ python src/preprocess.py --config configs/train.yaml
 4. **Обучение модели**:
 
 ```bash
-python src/train.py --config configs/train.yaml
+python -m src.train --config configs/train.yaml
+```
+
+* **Запустить оценку (Optional)** (предполагается, что artifacts/model уже существует и в нём файлы pytorch_model.bin и config.json):
+```bash
+python -m src.evaluate --config configs/train.yaml --model-dir artifacts/model
 ```
 
 5. **Инференс / top-N рекомендации**:
@@ -170,7 +175,7 @@ python src/train.py --config configs/train.yaml
 6. **Запуск тестов**:
 
 ```bash
-pytest -q
+python -m pytest -q
 ```
 
 7. **Линтинг / автоформатирование**:
