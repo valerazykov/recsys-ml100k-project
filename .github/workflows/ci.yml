@@ -7,11 +7,13 @@ on:
       - main
       - develop
       - tasks_1-3
+      - tasks_part_2
   pull_request:
     branches:
       - main
       - develop
       - tasks_1-3
+      - tasks_part_2
 
 jobs:
   test:
