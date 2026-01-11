@@ -77,7 +77,6 @@ def load_model_from_dir(model_dir: str, device: torch.device):
     logger.info(f"Building model from saved config keys: {list(model_cfg.keys())}")
     model = model_mod.build_model_from_cfg(model_cfg)
     # load weights
-    map_loc = None if device.type == "cpu" else {"cuda:0": f"cuda:{device.index}" if device.index is not None else "cuda:0"}
     # safer: use map_location=device
     try:
         state = torch.load(model_bin, map_location=str(device))
@@ -124,7 +123,9 @@ def main():
     # data paths
     data_cfg = cfg.get("data", {}) or {}
     ml100k_dir = data_cfg.get("ml100k_dir", "data/ml-100k")
-    processed_dir = data_cfg.get("processed_dir") or os.path.join(ml100k_dir, "processed")
+    processed_dir = data_cfg.get("processed_dir") or os.path.join(
+        ml100k_dir, "processed"
+    )
     train_path = data_cfg.get("train_path") or os.path.join(processed_dir, "train.csv")
     val_path = data_cfg.get("val_path") or os.path.join(processed_dir, "val.csv")
     test_path = data_cfg.get("test_path") or os.path.join(processed_dir, "test.csv")
@@ -133,8 +134,12 @@ def main():
     train_cfg = cfg.get("train", {}) or {}
     batch_size = int(train_cfg.get("batch_size", 1024))
     num_workers = int(train_cfg.get("num_workers", 0))
-    model_type = str(train_cfg.get("model_type", cfg.get("model", {}).get("type", "mf")))
-    logger.info(f"Preparing dataloaders with model_type={model_type}, batch_size={batch_size}, num_workers={num_workers}")
+    model_type = str(
+        train_cfg.get("model_type", cfg.get("model", {}).get("type", "mf"))
+    )
+    logger.info(
+        f"Preparing dataloaders with model_type={model_type}, batch_size={batch_size}, num_workers={num_workers}"
+    )
 
     # pass None for n_users/n_items to let dataset infer from files
     dataloaders = dataset_mod.get_dataloaders(
@@ -153,7 +158,9 @@ def main():
     # choose dataloader to evaluate: prefer test, else val
     eval_loader = dataloaders.test or dataloaders.val
     if eval_loader is None:
-        raise RuntimeError("No eval dataloader found (neither test nor val). Run preprocessing to create splits.")
+        raise RuntimeError(
+            "No eval dataloader found (neither test nor val). Run preprocessing to create splits."
+        )
 
     # load model from model_dir
     model_dir = args.model_dir
@@ -163,12 +170,16 @@ def main():
     model, model_cfg = load_model_from_dir(model_dir, device=device)
 
     # evaluation parameters
-    compute_full = (not args.no_full_ranking) and bool(cfg.get("metrics", {}).get("compute_full_ranking", False))
+    compute_full = (not args.no_full_ranking) and bool(
+        cfg.get("metrics", {}).get("compute_full_ranking", False)
+    )
     topk = int(cfg.get("metrics", {}).get("eval_topk", 10))
     eval_full_batch = int(cfg.get("evaluation", {}).get("full_ranking_batch", 4096))
     n_items = dataloaders.n_items
 
-    logger.info(f"Starting evaluation. compute_full_ranking={compute_full}, topk={topk}, n_items={n_items}")
+    logger.info(
+        f"Starting evaluation. compute_full_ranking={compute_full}, topk={topk}, n_items={n_items}"
+    )
 
     metrics = engine_mod.evaluate(
         model=model,
@@ -197,7 +208,9 @@ def main():
 
     dvc_lock = "dvc.lock"
     if os.path.exists(dvc_lock):
-        logger.info("Found dvc.lock in repo root (pipeline hash information available).")
+        logger.info(
+            "Found dvc.lock in repo root (pipeline hash information available)."
+        )
     else:
         logger.info("dvc.lock not found in repo root.")
 
