@@ -182,7 +182,7 @@ def main():
     )
 
     # where to save metrics
-    out_path = args.output or os.path.join(model_dir, "metrics_eval.json")
+    out_path = args.output or os.path.join("artifacts/metrics", "metrics_eval.json")
     utils.ensure_dir(os.path.dirname(out_path) or ".")
     utils.save_json(metrics, out_path)
     logger.info(f"Saved evaluation metrics to {out_path}")

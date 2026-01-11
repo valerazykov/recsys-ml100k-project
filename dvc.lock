@@ -1,12 +1,12 @@
 schema: '2.0'
 stages:
   prepare:
-    cmd: python -m src.preprocess --config configs/train.yaml --write-config
+    cmd: python -m src.preprocess --config configs/train.yaml
     deps:
     - path: configs/train.yaml
       hash: md5
-      md5: 1546efd7e77fbbac8e342fe708412851
-      size: 2446
+      md5: fd913f07e736539e28fe573cfdd8315f
+      size: 2307
     - path: data/ml-100k/
       hash: md5
       md5: 33e3b98f41ab1289116f74de90b95a24.dir
@@ -27,8 +27,8 @@ stages:
     deps:
     - path: configs/train.yaml
       hash: md5
-      md5: 1546efd7e77fbbac8e342fe708412851
-      size: 2446
+      md5: fd913f07e736539e28fe573cfdd8315f
+      size: 2307
     - path: data/processed/
       hash: md5
       md5: 9a644bc87f60a8d5fe012e92e3b45f97.dir
@@ -63,8 +63,8 @@ stages:
       nfiles: 22
     - path: configs/train.yaml
       hash: md5
-      md5: 1546efd7e77fbbac8e342fe708412851
-      size: 2446
+      md5: fd913f07e736539e28fe573cfdd8315f
+      size: 2307
     - path: src/evaluate.py
       hash: md5
       md5: 660192b76845667af61fae60c73f59fa

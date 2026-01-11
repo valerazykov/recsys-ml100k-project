@@ -1,12 +1,12 @@
 stages:
   prepare:
-    cmd: python -m src.preprocess --config configs/train.yaml --write-config
+    cmd: python -m src.preprocess --config configs/train.yaml
     deps:
       - src/preprocess.py
       - configs/train.yaml
-      - data/ml-100k/u.data
+      - data/ml-100k/
     outs:
-      - data/ml-100k/processed
+      - data/processed
 
   train:
     cmd: python -m src.train --config configs/train.yaml
@@ -15,13 +15,9 @@ stages:
       - src/engine.py
       - src/model.py
       - configs/train.yaml
-      - data/ml-100k/processed/train.csv
+      - data/processed/
     outs:
       - artifacts/model
-    params:
-      - train.epochs
-      - train.batch_size
-      - train.lr
 
   evaluate:
     cmd: python -m src.evaluate --config configs/train.yaml --model-dir artifacts/model
@@ -30,4 +26,4 @@ stages:
       - artifacts/model
       - configs/train.yaml
     metrics:
-      - artifacts/model/metrics_eval.json
+      - artifacts/metrics/metrics_eval.json

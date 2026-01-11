@@ -1,5 +1,5 @@
 data:
-  ml100k_dir: "data/ml-100k"
+  ml100k_dir: "data"
   ratings_file: "data/ml-100k/u.data"
   users_file: "data/ml-100k/u.user"
   items_file: "data/ml-100k/u.item"
