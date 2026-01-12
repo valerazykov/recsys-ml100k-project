@@ -6,3 +6,5 @@ src/__pycache__/*
 # mlruns/*
 # mlflow.db
 .DS_Store
+logs/*
+artifacts/train.log

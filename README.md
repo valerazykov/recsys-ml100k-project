@@ -43,7 +43,8 @@ cd ..
 * **Воспроизводимость**: фиксированный `random_seed`, зафиксированные версии пакетов в `requirements.txt`.
 * **DVC**: пайплайн stages — `prepare`, `train`, `evaluate`, локальный remote для данных/моделей.
 * **MLflow** для трекинга экспериментов.
-* воспроизводимый **Docker-образ** (ml-app:v1), запускающий **офлайн-инференс** одной командой.
+* Воспроизводимый **Docker-образ** (ml-app:v1), запускающий **офлайн-инференс** одной командой.
+* Готовый **Docker-контейнер**, который автоматически поднимает **TorchServe** и регистрирует модель, и сервис, отвечающий на REST-запросы.
 
 ---
 
@@ -90,7 +91,7 @@ src/
   model.py           # MF / NCF с save_pretrained/from_pretrained
   train.py           # CLI runner — читает config, логирует запускает обучение
   engine.py          # функции обучения и оценки модели
-  evaluate.py        # подсчет метрик на тесте (при отстутсвии - на валидации)
+  evaluate.py        # подсчет метрик на тесте (при отсутствии - на валидации)
   predict.py         # офлайн-инференс
   utils.py
   mlflow_utils.py
@@ -297,7 +298,7 @@ mlflow ui -p 5000
 
 ---
 
-## 14. Docker — офлайн-инференс (ml-app:v1)
+## 14. Офлайн-инференс (Docker: ml-app:v1)
 
 Этот проект включает готовый Docker-образ для офлайн-инференса — `ml-app:v1`. Образ минимизирован: в нём установлены только runtime-зависимости (numpy, pandas и CPU-версия PyTorch), а в контейнер копируются только минимальные файлы для предсказания и веса модели.
 
@@ -356,6 +357,84 @@ user_idx,recommended_items
 0,"1303,406,167,316,63,480,113,597,510,11"
 1,"406,167,270,1303,63,316,249,49,314,283"
 2,"406,167,1303,270,316,63,314,49,249,113"
+```
+
+---
+
+## 15. Serving модели через TorchServe (Docker)
+
+В проекте реализован production-ready сервис инференса на базе **TorchServe**, упакованный в Docker-контейнер.
+
+### Сборка `.mar`-файла
+
+Модель упаковывается с помощью `torch-model-archiver`:
+
+```bash
+mkdir -p model_store
+
+torch-model-archiver \
+  --model-name recsys \
+  --version 1.0 \
+  --serialized-file artifacts/model/pytorch_model.bin \
+  --handler torchserve_handler.py \
+  --extra-files "artifacts/model/config.json,src/model.py,data/processed/user2idx.json,data/processed/item2idx.json" \
+  --export-path model_store \
+  --force
+```
+
+В результате создаётся файл `model_store/recsys.mar`.
+
+Для сервинга используется официальный образ `pytorch/torchserve` (см. **Dockerfile.torchserve**).
+
+---
+
+### Сборка и запуск контейнера
+
+```bash
+docker build -f Dockerfile.torchserve -t recsys-serve:1.0 .
+docker run -d -p 8080:8080 -p 8081:8081 --name recsys-serve recsys-serve:1.0
+```
+
+---
+
+### Проверка состояния сервиса
+
+Management API:
+
+```bash
+curl http://localhost:8081/models
+```
+
+Ожидаемый ответ:
+
+```json
+{
+  "models": [
+    {
+      "modelName": "recsys",
+      "modelUrl": "recsys.mar"
+    }
+  ]
+}
+```
+
+---
+
+### Инференс (HTTP API)
+
+```bash
+curl -X POST http://localhost:8080/predictions/recsys \
+  -H "Content-Type: application/json" \
+  -d '{"user": 42, "top_k": 10}'
+```
+
+Пример ответа:
+
+```json
+{
+  "user": 42,
+  "recs": [406, 270, 167, 63, 1303, 311, 316, 314, 49, 249]
+}
 ```
 
 ---

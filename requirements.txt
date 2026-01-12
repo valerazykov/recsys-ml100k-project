@@ -17,3 +17,7 @@ tqdm>=4.66.0
 # dvc & mlflow
 dvc>=3.66.1
 mlflow>=3.8.1
+
+# TorchServe
+torchserve
+torch-model-archiver

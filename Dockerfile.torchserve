@@ -1,0 +1,17 @@
+FROM pytorch/torchserve:latest
+
+USER root
+
+# Create model-store and copy mar
+RUN mkdir -p /home/model-server/model-store
+COPY model_store/recsys.mar /home/model-server/model-store/
+
+# Optional: copy config.properties (tune workers, etc.)
+COPY config.properties /home/model-server/
+
+ENV MANAGEMENT_API_PORT=8081
+ENV INFERENCE_API_PORT=8080
+
+EXPOSE 8080 8081
+
+CMD ["torchserve", "--start", "--model-store", "/home/model-server/model-store", "--models", "recsys=recsys.mar", "--foreground", "--ts-config", "config.properties", "--disable-token-auth"]
