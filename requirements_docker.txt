@@ -1,0 +1,5 @@
+# runtime-only deps for inference
+numpy>=1.25.0
+pandas>=2.1.0
+
+# do NOT include torch here — we'll install CPU torch explicitly from the PyTorch index

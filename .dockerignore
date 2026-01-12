@@ -13,3 +13,4 @@ tests/
 src/__pycache__/*
 mlflow.db
 .DS_Store
+artifacts/model/checkpoint_epoch_*.pth

@@ -7,6 +7,7 @@ import os
 from typing import List, Optional, Tuple, Dict, Any
 
 import numpy as np
+import pandas as pd
 import torch
 
 import src.model as model_mod
@@ -219,8 +220,6 @@ def main():
         raise ValueError(
             "n_items must be provided either via --n-items or saved in model config."
         )
-
-    import pandas as pd
 
     if not os.path.exists(args.input_path):
         raise FileNotFoundError(args.input_path)
