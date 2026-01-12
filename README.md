@@ -26,7 +26,7 @@ cd ..
 
 Или скачать архив по [ссылке](https://files.grouplens.org/datasets/movielens/ml-100k.zip) и распаковать в `./data`.
 
-> В этом репозитории `data/ml-100k/` — сырой датасет, а `data/processed/` — выход `preprocess` (тот, что под версионированием DVC).
+> В этом репозитории `data/ml-100k/` — сырой датасет, а `data/processed/` — выход `preprocess`.
 
 ---
 
@@ -42,6 +42,8 @@ cd ..
 * **Linting**: flake8 + форматирование кода.
 * **Воспроизводимость**: фиксированный `random_seed`, зафиксированные версии пакетов в `requirements.txt`.
 * **DVC**: пайплайн stages — `prepare`, `train`, `evaluate`, локальный remote для данных/моделей.
+* **MLflow** для трекинга экспериментов.
+* воспроизводимый **Docker-образ** (ml-app:v1), запускающий **офлайн-инференс** одной командой.
 
 ---
 
@@ -89,7 +91,7 @@ src/
   train.py           # CLI runner — читает config, логирует запускает обучение
   engine.py          # функции обучения и оценки модели
   evaluate.py        # подсчет метрик на тесте (при отстутсвии - на валидации)
-  predict.py         # инференс
+  predict.py         # офлайн-инференс
   utils.py
   mlflow_utils.py
   metrics.py
@@ -295,3 +297,65 @@ mlflow ui -p 5000
 
 ---
 
+## 14. Docker — офлайн-инференс (ml-app:v1)
+
+Этот проект включает готовый Docker-образ для офлайн-инференса — `ml-app:v1`. Образ минимизирован: в нём установлены только runtime-зависимости (numpy, pandas и CPU-версия PyTorch), а в контейнер копируются только минимальные файлы для предсказания и веса модели.
+
+---
+
+### Как собрать образ
+
+(в корне репозитория)
+
+```bash
+docker build -t ml-app:v1 .
+```
+
+---
+
+### Как запустить контейнер
+
+```bash
+docker run --rm \
+  -v /path/to/predict_in:/data/in \
+  -v /path/to/predict_out:/data/out \
+  ml-app:v1 \
+  --model-dir /app/artifacts/model --input-path /data/in/input.csv --output-path /data/out/preds.csv --top-k 10
+```
+
+Запуск на небольшом примере в репозитории (убедитесь, что docker_in_out_example/predict_out/preds.csv создается):
+
+```bash
+docker run --rm -v $(PWD)/docker_in_out_example/predict_in:/data/in -v $(PWD)/docker_in_out_example/predict_out:/data/out ml-app:v1 \
+  --model-dir /app/artifacts/model --input-path /data/in/input.csv --output-path /data/out/preds.csv --top-k 10
+```
+
+---
+
+### Формат входных / выходных файлов
+
+* `input.csv` — CSV с запросами/записями для предсказаний. Удобный и надёжный формат (в репозитории используются processed splits с колонками `user_idx`, `item_idx`, `rating`, `timestamp`). Для предсказания:
+
+  * Минимально: колонка `user_idx` — индекс пользователя (0..n_users-1).
+  * Если у вас исходные id (`user_id`, `item_id`), перед инференсом требуется mapping `user2idx.json`, `item2idx.json` (которые генерирует `preprocess.py`) — либо заранее преобразуйте ids в индексы.
+* `output` — `preds.csv`: содержит предсказанные рейтинги / топ-K рекомендации для каждого запроса. При использовании `--top-k` скрипт может выводить top-K items для каждого user.
+
+Пример простого `input.csv`:
+
+```csv
+user_idx
+0
+1
+2
+```
+
+Пример ожидаемого `preds.csv`:
+
+```csv
+user_idx,recommended_items
+0,"1303,406,167,316,63,480,113,597,510,11"
+1,"406,167,270,1303,63,316,249,49,314,283"
+2,"406,167,1303,270,316,63,314,49,249,113"
+```
+
+---
