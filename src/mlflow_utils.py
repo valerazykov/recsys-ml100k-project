@@ -6,6 +6,7 @@ import subprocess
 from typing import Dict, Optional
 import re
 import numbers
+from pathlib import Path
 
 import mlflow
 
@@ -62,6 +63,8 @@ def mlflow_start_run_from_cfg(cfg: Dict, experiment_name: Optional[str] = None):
     - experiment_name: optional experiment name to use (default from cfg or 'default')
     Returns active run object (mlflow.active_run()).
     """
+    mlflow.set_tracking_uri(f"file://{(Path.cwd() / 'mlruns').resolve()}")
+
     # decide experiment name
     if experiment_name is None:
         experiment_name = cfg.get("mlflow", {}).get(
