@@ -35,7 +35,9 @@ def _infer_init_args_from_state(state: dict) -> dict:
             init["n_users"] = int(u_w.shape[0])
             init["n_items"] = int(i_w.shape[0])
             # try to infer embedding_dim
-            init["embedding_dim"] = int(u_w.shape[1]) if len(u_w.shape) > 1 else init.get("embedding_dim")
+            init["embedding_dim"] = (
+                int(u_w.shape[1]) if len(u_w.shape) > 1 else init.get("embedding_dim")
+            )
         except Exception:
             pass
     return init
@@ -56,19 +58,25 @@ def load_model_from_dir(
     # try to find model type and model_init_args in several common layouts
     # layout A: cfg_loaded contains top-level "model": { "type": "...", "model_init_args": {...} }
     model_section = {}
-    if isinstance(cfg_loaded, dict) and "model" in cfg_loaded and isinstance(cfg_loaded["model"], dict):
+    if (
+        isinstance(cfg_loaded, dict)
+        and "model" in cfg_loaded
+        and isinstance(cfg_loaded["model"], dict)
+    ):
         model_section = cfg_loaded["model"]
     else:
         # maybe config.json already was the model section itself
         model_section = cfg_loaded if isinstance(cfg_loaded, dict) else {}
 
-    mtype = (model_section.get("type") or model_section.get("model_type") or "mf")
+    mtype = model_section.get("type") or model_section.get("model_type") or "mf"
     model_init_args = dict(model_section.get("model_init_args") or {})
 
     # If n_users / n_items missing -> try to infer from saved state dict
     state_path = os.path.join(model_dir, "pytorch_model.bin")
     state = None
-    if (model_init_args.get("n_users") is None) or (model_init_args.get("n_items") is None):
+    if (model_init_args.get("n_users") is None) or (
+        model_init_args.get("n_items") is None
+    ):
         if os.path.exists(state_path):
             try:
                 # load to CPU to inspect shapes
@@ -78,16 +86,28 @@ def load_model_from_dir(
                 for k, v in inferred.items():
                     model_init_args.setdefault(k, v)
                 if len(inferred) > 0:
-                    logger.info("Inferred model_init_args from state_dict: %s", inferred)
+                    logger.info(
+                        "Inferred model_init_args from state_dict: %s", inferred
+                    )
             except Exception as e:
                 logger.warning("Failed to load state_dict for inference: %s", e)
         else:
-            logger.warning("state file %s not found; cannot infer n_users/n_items", state_path)
+            logger.warning(
+                "state file %s not found; cannot infer n_users/n_items", state_path
+            )
 
     # assemble a model_cfg acceptable for build_model_from_cfg
     model_cfg = {"type": mtype, "model_init_args": model_init_args}
     # copy a few top-level shortcuts if present in model_section to keep behavior consistent
-    for k in ("embedding_dim", "ncf_hidden", "hidden_dims", "dropout", "clamp_preds", "min_rating", "max_rating"):
+    for k in (
+        "embedding_dim",
+        "ncf_hidden",
+        "hidden_dims",
+        "dropout",
+        "clamp_preds",
+        "min_rating",
+        "max_rating",
+    ):
         if k in model_section and k not in model_init_args:
             model_cfg[k] = model_section[k]
 
@@ -96,7 +116,9 @@ def load_model_from_dir(
         model = model_mod.build_model_from_cfg(model_cfg)
     except Exception as e:
         # last resort: try MFModel/NCFModel defaults directly
-        logger.exception("build_model_from_cfg failed: %s; attempting direct class instantiation", e)
+        logger.exception(
+            "build_model_from_cfg failed: %s; attempting direct class instantiation", e
+        )
         if mtype.lower().startswith("ncf"):
             model = model_mod.NCFModel(**model_init_args)
         else:
@@ -107,7 +129,9 @@ def load_model_from_dir(
         if os.path.exists(state_path):
             state = torch.load(state_path, map_location="cpu")
         else:
-            logger.warning("No state_dict found at %s; returning uninitialized model", state_path)
+            logger.warning(
+                "No state_dict found at %s; returning uninitialized model", state_path
+            )
             model.to(map_location)
             return model, cfg_loaded
 
