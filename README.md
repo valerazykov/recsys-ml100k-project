@@ -241,7 +241,7 @@ dvc push
 dvc status -c
 ```
 
-**Как восстановить проект на другой машине**
+(Как восстановить проект на другой машине)
 Если вы клонируете репозиторий на другую машину:
 
 ```bash
@@ -326,7 +326,7 @@ docker run --rm \
 Запуск на небольшом примере в репозитории (убедитесь, что docker_in_out_example/predict_out/preds.csv создается):
 
 ```bash
-docker run --rm -v $(PWD)/docker_in_out_example/predict_in:/data/in -v $(PWD)/docker_in_out_example/predict_out:/data/out ml-app:v1 \
+docker run --rm -v $PWD/docker_in_out_example/predict_in:/data/in -v $PWD/docker_in_out_example/predict_out:/data/out ml-app:v1 \
   --model-dir /app/artifacts/model --input-path /data/in/input.csv --output-path /data/out/preds.csv --top-k 10
 ```
 
