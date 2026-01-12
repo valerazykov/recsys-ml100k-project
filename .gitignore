@@ -5,3 +5,4 @@ src/__pycache__/*
 .venv/*
 # mlruns/*
 # mlflow.db
+.DS_Store

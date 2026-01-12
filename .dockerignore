@@ -1,0 +1,15 @@
+.git
+.dvc
+.dvc/cache
+mlruns
+__pycache__
+*.pyc
+data/
+tests/
+.env
+.venv
+.vscode
+.idea
+src/__pycache__/*
+mlflow.db
+.DS_Store

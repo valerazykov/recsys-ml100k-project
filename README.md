@@ -88,9 +88,11 @@ src/
   model.py           # MF / NCF с save_pretrained/from_pretrained
   train.py           # CLI runner — читает config, логирует запускает обучение
   engine.py          # функции обучения и оценки модели
+  evaluate.py        # подсчет метрик на тесте (при отстутсвии - на валидации)
+  predict.py         # инференс
   utils.py
+  mlflow_utils.py
   metrics.py
-  evaluate.py
 tests/
   test_preprocess.py
   test_dataset.py
